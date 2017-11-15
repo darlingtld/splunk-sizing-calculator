@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Grid, Menu, Segment, Icon} from 'semantic-ui-react';
 import './ConfigPanel.scss';
+import ConfigServerPanel from "./ConfigServerPanel";
 
 export default class ConfigPanel extends Component {
     constructor(args) {
@@ -41,6 +42,14 @@ export default class ConfigPanel extends Component {
 
     handleItemClick = (e, {name}) => this.setState({activeItem: name});
 
+    renderConfigItemPanel = activeItem => {
+        switch(activeItem){
+            case 'Server Specifications':
+                return <ConfigServerPanel/>
+        }
+
+    }
+
     render() {
         const {activeItem} = this.state;
 
@@ -48,7 +57,7 @@ export default class ConfigPanel extends Component {
             <div className="config-panel">
                 <Grid>
                     <Grid.Column width={6}>
-                        <Menu fluid vertical pointing>
+                        <Menu fluid vertical pointing size='huge'>
                             {this.state.configItems.map(item => {
                                     if (item.subs.length === 0) {
                                         return <Menu.Item name={item.name} active={activeItem === item.name}
@@ -74,9 +83,7 @@ export default class ConfigPanel extends Component {
                     </Grid.Column>
 
                     <Grid.Column stretched width={10}>
-                        <Segment>
-                            This is an stretched grid column. This segment will always match the tab height
-                        </Segment>
+                        {this.renderConfigItemPanel(this.state.activeItem)}
                     </Grid.Column>
                 </Grid>
             </div>
