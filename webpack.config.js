@@ -1,67 +1,32 @@
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
-const path = require('path')
 const webpack = require('webpack')
+const path = require('path')
 
-const analyze = !!process.env.ANALYZE_ENV
-const env = process.env.NODE_ENV || 'development'
-
-const webpackConfig = {
-  name: 'client',
-  target: 'web',
-
-  entry: {
-    app: path.resolve('src/main.jsx'),
-  },
-
-  module: {
-    rules: [{
-      test: /\.(js|jsx)$/,
-      exclude: /node_modules/,
-      loader: 'babel-loader',
-    }],
-  },
-
-  plugins: [
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify(env),
-      },
-    }),
-  ],
-
-  output: {
-    filename: '[name].js',
-    path: path.resolve('public/dist'),
-    publicPath: '/',
-  },
-
-  resolve: {
-    modules: [
-      path.resolve('src'),
-      'node_modules',
-    ],
-    extensions: ['.js', '.jsx'],
-  },
+module.exports = {
+    devtool: 'source-map',
+    entry: {
+        'app': [
+            'babel-polyfill',
+            'react-hot-loader/patch',
+            './src/index'
+        ]
+    },
+    output: {
+        path: path.resolve(__dirname, './dist'),
+        filename: '[name].js'
+    },
+    module: {
+        rules: [
+            {test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader'},
+            {
+                test: /\.scss$/,
+                use: [{
+                    loader: "style-loader" // creates style nodes from JS strings
+                }, {
+                    loader: "css-loader" // translates CSS into CommonJS
+                }, {
+                    loader: "sass-loader" // compiles Sass to CSS
+                }]
+            },
+        ]
+    }
 }
-
-if (analyze) {
-  webpackConfig.plugins.push(new BundleAnalyzerPlugin())
-}
-
-if (env === 'production') {
-  webpackConfig.plugins.push(
-    new webpack.LoaderOptionsPlugin({
-      minimize: true,
-      debug: false,
-    }),
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        unused: true,
-        dead_code: true,
-        warnings: false,
-      },
-    })
-  )
-}
-
-module.exports = webpackConfig
