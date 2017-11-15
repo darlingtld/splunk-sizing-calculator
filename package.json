@@ -10,6 +10,7 @@
   "author": "Lingda Tang <lingda@splunk.com>",
   "dependencies": {
     "css-loader": "^0.28.7",
+    "file-loader": "^1.1.5",
     "lodash": "^4.17.4",
     "node-sass": "^4.6.1",
     "react": "^15.4.2",

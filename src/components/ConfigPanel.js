@@ -47,7 +47,7 @@ export default class ConfigPanel extends Component {
         return (
             <div className="config-panel">
                 <Grid>
-                    <Grid.Column width={3}>
+                    <Grid.Column width={6}>
                         <Menu fluid vertical pointing>
                             {this.state.configItems.map(item => {
                                     if (item.subs.length === 0) {
@@ -73,7 +73,7 @@ export default class ConfigPanel extends Component {
                         </Menu>
                     </Grid.Column>
 
-                    <Grid.Column stretched width={5}>
+                    <Grid.Column stretched width={10}>
                         <Segment>
                             This is an stretched grid column. This segment will always match the tab height
                         </Segment>
