@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Image} from 'semantic-ui-react';
-import img from '../placeholder.png';
+import img from '../assets/placeholder.png';
 
 export default class ConfigVizPanel extends Component{
     constructor(args){

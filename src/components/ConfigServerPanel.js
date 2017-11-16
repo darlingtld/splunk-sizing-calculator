@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
-import {Segment, Dropdown, Item, Popup, Icon, Input, Button} from 'semantic-ui-react';
+import {Segment, Dropdown, Item, Popup, Icon, Label, Button} from 'semantic-ui-react';
 import PlusMinusInput from "./shared/PlusMinusInput";
+import searchHead from '../assets/search_head.png';
+import indexer from '../assets/indexer.png';
 
 export default class ConfigServerPanel extends Component {
     constructor(args) {
@@ -75,59 +77,64 @@ export default class ConfigServerPanel extends Component {
                             </Item.Content>
                         </Item.Content>
                     </Item>
-                    <Item>
-                        <Item.Content>
-                            <Item.Header>
-                                Search Head
-                                <Popup
-                                    trigger={<Icon name='question circle' size='small'/>}
-                                    content='Please use number of physical cores if you do not want your load average to exceed the number of physical CPUs. You may need to change max searches per cpu in limits.conf in order to get the max concurrent search limit to line up with what the indexers can support.'
-                                    size='small'
-                                    position='bottom center'
-                                    inverted
-                                />
-                            </Item.Header>
-                            <Item.Meta>Maximum processor cores</Item.Meta>
-                            <Item.Description>
-                                <PlusMinusInput/>
-                            </Item.Description>
-                        </Item.Content>
-                    </Item>
-                    <Item>
-                        <Item.Content>
-                            <Item.Header>
-                                Indexer
-                                <Popup
-                                    trigger={<Icon name='question circle' size='small'/>}
-                                    content='Please use number of physical cores if you do not want your load average to exceed the number of physical CPUs.'
-                                    size='small'
-                                    position='bottom center'
-                                    inverted
-                                />
-                            </Item.Header>
-                            <Item.Meta>Maximum processor cores</Item.Meta>
-                            <Item.Description>
-                                <PlusMinusInput/>
-                            </Item.Description>
-                        </Item.Content>
-                    </Item>
-                    <Item>
-                        <Item.Content>
-                            <Item.Header>
-                                Margin of Error (additional headroom) %
-                                <Popup
-                                    trigger={<Icon name='question circle' size='small'/>}
-                                    content='Margin of Error is a fudge factor. Increase it if you want to increase headroom or if you have apps besides ES. If the other app is about as heavyweight as ES, increase margin of error to 50%.'
-                                    size='small'
-                                    position='bottom center'
-                                    inverted
-                                />
-                            </Item.Header>
-                            <Item.Description>
-                                <PlusMinusInput/>
-                            </Item.Description>
-                        </Item.Content>
-                    </Item>
+                    <Item.Group divided>
+                        <Item>
+                            <Item.Image src={searchHead} size='tiny' />
+                            <Item.Content>
+                                <Item.Header>
+                                    Search Head
+                                    <Popup
+                                        trigger={<Icon name='question circle' size='small'/>}
+                                        content='Please use number of physical cores if you do not want your load average to exceed the number of physical CPUs. You may need to change max searches per cpu in limits.conf in order to get the max concurrent search limit to line up with what the indexers can support.'
+                                        size='small'
+                                        position='bottom center'
+                                        inverted
+                                    /></Item.Header>
+                                <Item.Meta>
+                                    <span className='cinema'>Maximum processor cores</span>
+                                </Item.Meta>
+                                <Item.Description><PlusMinusInput icon='microchip'/></Item.Description>
+                            </Item.Content>
+                        </Item>
+
+                        <Item>
+                            <Item.Image src={indexer} size='tiny'/>
+
+                            <Item.Content>
+                                <Item.Header>Indexer
+                                    <Popup
+                                        trigger={<Icon name='question circle' size='small'/>}
+                                        content='Please use number of physical cores if you do not want your load average to exceed the number of physical CPUs.'
+                                        size='small'
+                                        position='bottom center'
+                                        inverted
+                                    /></Item.Header>
+                                <Item.Meta>
+                                    <span className='cinema'>Maximum processor cores</span>
+                                </Item.Meta>
+                                <Item.Description><PlusMinusInput icon='microchip'/></Item.Description>
+                            </Item.Content>
+                        </Item>
+
+                        <Item>
+                            <Item.Image src={searchHead} size='tiny'/>
+                            <Item.Content>
+                                <Item.Header>
+                                    Margin of Error %
+                                    <Popup
+                                        trigger={<Icon name='question circle' size='small'/>}
+                                        content='Margin of Error is a fudge factor. Increase it if you want to increase headroom or if you have apps besides ES. If the other app is about as heavyweight as ES, increase margin of error to 50%.'
+                                        size='small'
+                                        position='bottom center'
+                                        inverted
+                                    /></Item.Header>
+                                <Item.Meta>
+                                    <span className='cinema'>additional headroom</span>
+                                </Item.Meta>
+                                <Item.Description><PlusMinusInput icon='percent'/></Item.Description>
+                            </Item.Content>
+                        </Item>
+                    </Item.Group>
                 </Item.Group>
             </Segment>
         )
