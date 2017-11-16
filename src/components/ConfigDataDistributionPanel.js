@@ -1,14 +1,12 @@
 import React, {Component} from 'react';
-import {Segment, Table, Item, Popup, Icon, Label, Button} from 'semantic-ui-react';
+import {Segment, Table, Item, Popup, Icon, Radio, Input} from 'semantic-ui-react';
 import PlusMinusInput from "./shared/PlusMinusInput";
-import searchHead from '../assets/search_head_color.png';
-import indexer from '../assets/indexer_color.png';
-import marginOfError from '../assets/margin_of_error.png';
 
 export default class ConfigDataDistributionPanel extends Component {
     constructor(args) {
         super(args);
         this.state = {
+            checked: false,
             networkTraffic: [
                 {
                     text: 'juniper*',
@@ -86,8 +84,9 @@ export default class ConfigDataDistributionPanel extends Component {
         }
     }
 
+    toggle = () => this.setState({checked: !this.state.checked})
+
     render() {
-        console.log(this.state[this.props.dataModel]);
         return (
             <Segment>
                 <Item.Group relaxed={true}>
@@ -107,21 +106,44 @@ export default class ConfigDataDistributionPanel extends Component {
                         </Item.Content>
                     </Item>
                     <Item>
+                        <Item.Content style={{textAlign: 'right'}}>
+                            <Radio slider label='Sourcetype settings'
+                                   onChange={this.toggle}
+                                   checked={this.state.checked}/>
+                        </Item.Content>
+                    </Item>
+                    <Item>
                         <Table basic='very' selectable>
                             <Table.Header>
                                 <Table.Row>
                                     <Table.HeaderCell>Sourcetype</Table.HeaderCell>
-                                    <Table.HeaderCell>Data ingestion per day</Table.HeaderCell>
+                                    <Table.HeaderCell textAlign='center'>Data ingestion per day</Table.HeaderCell>
                                 </Table.Row>
                             </Table.Header>
                             <Table.Body>
-                                {this.state[this.props.dataModel].map(item =>
-                                    <Table.Row>
-                                        <Table.Cell>{item.text}</Table.Cell>
-                                        <Table.Cell><PlusMinusInput label='GB'/></Table.Cell>
+                                {this.state.checked ?
+                                    this.state[this.props.dataModel].map(item =>
+                                        <Table.Row key={item.value}>
+                                            <Table.Cell>{item.text}</Table.Cell>
+                                            <Table.Cell textAlign='right'><PlusMinusInput label='GB'/></Table.Cell>
+                                        </Table.Row>
+                                    ) :
+                                    <Table.Row key='total'>
+                                        <Table.Cell>Total</Table.Cell>
+                                        <Table.Cell textAlign='right'><PlusMinusInput label='GB'/></Table.Cell>
                                     </Table.Row>
-                                )}
+                                }
                             </Table.Body>
+                            {this.state.checked ?
+                                <Table.Footer>
+                                    <Table.Row>
+                                        <Table.HeaderCell>Total</Table.HeaderCell>
+                                        <Table.HeaderCell textAlign='right'>
+                                            <Input label={{basic: true, content: 'GB'}} labelPosition='right'/>
+                                        </Table.HeaderCell>
+                                    </Table.Row>
+                                </Table.Footer> : null
+                            }
                         </Table>
                     </Item>
                 </Item.Group>

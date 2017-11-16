@@ -73,7 +73,7 @@ export default class ConfigPanel extends Component {
                         <Menu fluid vertical pointing size='huge'>
                             {this.state.configItems.map(item => {
                                     if (item.subs.length === 0) {
-                                        return <Menu.Item name={item.name} active={activeItem === item.name}
+                                        return <Menu.Item name={item.name} key={item.name} active={activeItem === item.name}
                                                           onClick={this.handleItemClick}>
                                             <Icon name={item.icon}/>
                                             {item.name}
@@ -84,7 +84,7 @@ export default class ConfigPanel extends Component {
                                             {item.name}
                                             <Menu.Menu>
                                                 {item.subs.map(sub =>
-                                                    <Menu.Item name={sub} active={activeItem === sub}
+                                                    <Menu.Item name={sub} key={sub} active={activeItem === sub}
                                                                onClick={this.handleItemClick}/>
                                                 )}
                                             </Menu.Menu>
