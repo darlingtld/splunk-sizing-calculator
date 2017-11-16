@@ -5,6 +5,7 @@ import ConfigServerPanel from './ConfigServerPanel';
 import ConfigVersionPanel from './ConfigVersionPanel';
 import ConfigSearchLoadPanel from "./ConfigSearchLoadPanel";
 import ConfigDataDistributionPanel from "./ConfigDataDistributionPanel";
+import ConfigParallelTuningPanel from "./ConfigParallelTuningPanel";
 
 export default class ConfigPanel extends Component {
     constructor(args) {
@@ -42,7 +43,6 @@ export default class ConfigPanel extends Component {
         }
     }
 
-
     handleItemClick = (e, {name}) => this.setState({activeItem: name});
 
     renderConfigItemPanel = activeItem => {
@@ -58,7 +58,9 @@ export default class ConfigPanel extends Component {
             case 'Authentication':
                 return <ConfigDataDistributionPanel name='Authentication' dataModel='authentication'/>;
             case 'Web':
-                return <ConfigDataDistributionPanel name='Web' dataModel='web'/>
+                return <ConfigDataDistributionPanel name='Web' dataModel='web'/>;
+            case 'Parallel Configuration Tuning':
+                return <ConfigParallelTuningPanel/>;
         }
 
     };

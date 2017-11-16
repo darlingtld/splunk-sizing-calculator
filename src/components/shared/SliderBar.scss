@@ -1,0 +1,33 @@
+.slider-bar {
+  .rangeslider-horizontal {
+    height: 7px;
+  }
+  .rangeslider__handle:after {
+    background-color: transparent;
+    box-shadow: none;
+  }
+}
+
+.low {
+  .rangeslider__fill {
+    background-color: #8BC34A;
+  }
+}
+
+.medium {
+  .rangeslider__fill {
+    background-color: #FFEB3B;
+  }
+}
+
+.normal {
+  .rangeslider__fill {
+    background-color: #FFC107;
+  }
+}
+
+.high {
+  .rangeslider__fill {
+    background-color: #FF9800;
+  }
+}
