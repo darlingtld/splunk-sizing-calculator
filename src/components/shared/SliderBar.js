@@ -8,8 +8,9 @@ export default class SliderBar extends Component {
         super(args);
         this.state = {
             value: 3,
-            min: 3,
-            max: 20,
+            sliderValue: 30,
+            min: 30,
+            max: 200,
             sliderColor: ['low', 'medium', 'normal', 'high']
         }
 
@@ -17,20 +18,22 @@ export default class SliderBar extends Component {
 
     handleChange = (value) => {
         this.setState({
-            value: value,
+            sliderValue: value,
+            value: Math.floor(value / 10)
         })
     }
 
     render() {
-        const {value, min, max, sliderColor} = this.state;
-        const colorIndex = Math.floor(((value - min) / (max - min)) * (sliderColor.length - 1));
+        const {sliderValue, min, max, sliderColor} = this.state;
+        const colorIndex = Math.floor(((sliderValue - min) / (max - min)) * (sliderColor.length - 1));
         return (
             <div className='slider orientation-reversed slider-bar' style={{width: '100%'}}>
                 <div className={`slider-horizontal ${this.state.sliderColor[colorIndex]}`}>
                     <Slider
-                        min={3}
-                        max={20}
-                        value={value}
+                        min={this.state.min}
+                        max={this.state.max}
+                        value={sliderValue}
+                        tooltip={false}
                         orientation='horizontal'
                         onChange={this.handleChange}
                     />

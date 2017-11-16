@@ -2,7 +2,13 @@
   .rangeslider-horizontal {
     height: 7px;
   }
+  .rangeslider__handle{
+    height: 20px;
+    width: 20px;
+  }
   .rangeslider__handle:after {
+    width:0;
+    height:0;
     background-color: transparent;
     box-shadow: none;
   }
