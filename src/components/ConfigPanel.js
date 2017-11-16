@@ -1,7 +1,10 @@
 import React, {Component} from 'react';
 import {Grid, Menu, Segment, Icon} from 'semantic-ui-react';
 import './ConfigPanel.scss';
-import ConfigServerPanel from "./ConfigServerPanel";
+import ConfigServerPanel from './ConfigServerPanel';
+import ConfigVersionPanel from './ConfigVersionPanel';
+import ConfigSearchLoadPanel from "./ConfigSearchLoadPanel";
+import ConfigDataDistributionPanel from "./ConfigDataDistributionPanel";
 
 export default class ConfigPanel extends Component {
     constructor(args) {
@@ -43,12 +46,22 @@ export default class ConfigPanel extends Component {
     handleItemClick = (e, {name}) => this.setState({activeItem: name});
 
     renderConfigItemPanel = activeItem => {
-        switch(activeItem){
+        switch (activeItem) {
             case 'Server Specifications':
-                return <ConfigServerPanel/>
+                return <ConfigServerPanel/>;
+            case 'Splunk Enterprise Version':
+                return <ConfigVersionPanel/>;
+            case 'Search Load':
+                return <ConfigSearchLoadPanel/>;
+            case 'Network Traffic':
+                return <ConfigDataDistributionPanel name='Network Traffic' dataModel='networkTraffic'/>;
+            case 'Authentication':
+                return <ConfigDataDistributionPanel name='Authentication' dataModel='authentication'/>;
+            case 'Web':
+                return <ConfigDataDistributionPanel name='Web' dataModel='web'/>
         }
 
-    }
+    };
 
     render() {
         const {activeItem} = this.state;

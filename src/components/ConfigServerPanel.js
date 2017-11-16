@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import {Segment, Dropdown, Item, Popup, Icon, Label, Button} from 'semantic-ui-react';
 import PlusMinusInput from "./shared/PlusMinusInput";
-import searchHead from '../assets/search_head.png';
-import indexer from '../assets/indexer.png';
+import searchHead from '../assets/search_head_color.png';
+import indexer from '../assets/indexer_color.png';
+import marginOfError from '../assets/margin_of_error.png';
 
 export default class ConfigServerPanel extends Component {
     constructor(args) {
@@ -51,11 +52,11 @@ export default class ConfigServerPanel extends Component {
     render() {
         return (
             <Segment>
-                <Item.Group>
+                <Item.Group relaxed={true}>
                     <Item>
                         <Item.Content>
                             <Item.Header>
-                                Splunk hardware specification
+                                Splunk Hardware Specification
                                 <Popup
                                     trigger={<Icon name='question circle' size='small'/>}
                                     content='The reference hardware specification is a baseline for scoping and scaling the Splunk platform for your use.'
@@ -117,7 +118,7 @@ export default class ConfigServerPanel extends Component {
                         </Item>
 
                         <Item>
-                            <Item.Image src={searchHead} size='tiny'/>
+                            <Item.Image src={marginOfError} size='tiny'/>
                             <Item.Content>
                                 <Item.Header>
                                     Margin of Error %
