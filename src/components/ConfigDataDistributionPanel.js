@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {Segment, Table, Item, Popup, Icon, Radio, Input} from 'semantic-ui-react';
+import {isPositiveZeroNumber} from "./shared/Utils";
 import PlusMinusInput from "./shared/PlusMinusInput";
+import {merge, findIndex} from 'lodash';
 
 export default class ConfigDataDistributionPanel extends Component {
     constructor(args) {
@@ -11,80 +13,199 @@ export default class ConfigDataDistributionPanel extends Component {
                 {
                     text: 'juniper*',
                     value: 'juniper*',
+                    data: 0
                 },
                 {
                     text: 'cisco*',
                     value: 'cisco*',
+                    data: 0
                 },
                 {
                     text: 'mcafee*',
                     value: 'mcafee*',
+                    data: 0
                 },
                 {
                     text: 'symantec*',
                     value: 'symantec*',
+                    data: 0
                 },
                 {
                     text: 'websense*',
                     value: 'websense*',
+                    data: 0
                 },
                 {
                     text: 'bluecoat*',
                     value: 'bluecoat*',
+                    data: 0
                 },
                 {
                     text: '*network',
                     value: '*network',
+                    data: 0
                 },
                 {
                     text: 'syslog',
                     value: 'syslog',
+                    data: 0
                 },
                 {
                     text: 'stash',
                     value: 'stash',
+                    data: 0
                 }
             ],
             authentication: [
                 {
                     text: '*security',
                     value: '*security',
+                    data: 0
                 },
                 {
                     text: 'cisco*',
                     value: 'cisco*',
+                    data: 0
                 },
                 {
                     text: 'ps',
                     value: 'ps',
+                    data: 0
                 },
                 {
                     text: 'stash',
                     value: 'stash',
+                    data: 0
                 },
                 {
                     text: 'juniper:sslvpn',
                     value: 'juniper:sslvpn',
+                    data: 0
                 },
                 {
                     text: 'ossec',
                     value: 'ossec',
+                    data: 0
                 }
             ],
             web: [
                 {
                     text: 'bluecoat*',
                     value: 'bluecoat*',
+                    data: 0
                 },
                 {
                     text: 'websense*',
                     value: 'websense*',
+                    data: 0
                 }
-            ]
+            ],
+            networkTrafficTotal: 0,
+            authenticationTotal: 0,
+            webTotal: 0
         }
     }
 
-    toggle = () => this.setState({checked: !this.state.checked})
+    toggle = () => this.setState({checked: !this.state.checked});
+
+    onChangeData = (value, dataModel, item) => {
+        console.log(value, dataModel, item);
+        if (value === 'plus') {
+            item.data = item.data + 1;
+            let index;
+            switch (dataModel) {
+                case 'networkTraffic':
+                    const networkTraffic = this.state.networkTraffic;
+                    index = findIndex(networkTraffic, {text: item.text});
+                    networkTraffic.splice(index, 1, item);
+                    this.setState({
+                        networkTraffic: networkTraffic
+                    });
+                    break;
+                case 'authentication':
+                    const authentication = this.state.authentication;
+                    index = findIndex(authentication, {text: item.text});
+                    authentication.splice(index, 1, item);
+                    this.setState({
+                        authentication: authentication
+                    });
+                    break;
+                case 'web':
+                    const web = this.state.web;
+                    index = findIndex(web, {text: item.text});
+                    web.splice(index, 1, item);
+                    this.setState({
+                        web: web
+                    });
+                    break;
+            }
+        } else {
+            if (isPositiveZeroNumber(item.data - 1)) {
+                item.data = item.data - 1;
+                let index;
+                switch (dataModel) {
+                    case 'networkTraffic':
+                        const networkTraffic = this.state.networkTraffic;
+                        index = findIndex(networkTraffic, {text: item.text});
+                        networkTraffic.splice(index, 1, item);
+                        this.setState({
+                            networkTraffic: networkTraffic
+                        });
+                        break;
+                    case 'authentication':
+                        const authentication = this.state.authentication;
+                        index = findIndex(authentication, {text: item.text});
+                        authentication.splice(index, 1, item);
+                        this.setState({
+                            authentication: authentication
+                        });
+                        break;
+                    case 'web':
+                        const web = this.state.web;
+                        index = findIndex(web, {text: item.text});
+                        web.splice(index, 1, item);
+                        this.setState({
+                            web: web
+                        });
+                        break;
+                }
+            }
+        }
+    };
+
+    onChangeDataInput = (dataModel, item, data) => {
+        if (!isPositiveZeroNumber(data.value)) {
+            return;
+        }
+        let index;
+        item.data = parseInt(data.value);
+        switch (dataModel) {
+            case 'networkTraffic':
+                const networkTraffic = this.state.networkTraffic;
+                index = findIndex(networkTraffic, {text: item.text});
+                networkTraffic.splice(index, 1, item);
+                this.setState({
+                    networkTraffic: networkTraffic
+                });
+                break;
+            case 'authentication':
+                const authentication = this.state.authentication;
+                index = findIndex(authentication, {text: item.text});
+                authentication.splice(index, 1, item);
+                this.setState({
+                    authentication: authentication
+                });
+                break;
+            case 'web':
+                const web = this.state.web;
+                index = findIndex(web, {text: item.text});
+                web.splice(index, 1, item);
+                this.setState({
+                    web: web
+                });
+                break;
+        }
+    };
 
     render() {
         return (
@@ -125,7 +246,13 @@ export default class ConfigDataDistributionPanel extends Component {
                                     this.state[this.props.dataModel].map(item =>
                                         <Table.Row key={item.value}>
                                             <Table.Cell>{item.text}</Table.Cell>
-                                            <Table.Cell textAlign='right'><PlusMinusInput label='GB'/></Table.Cell>
+                                            <Table.Cell textAlign='right'>
+                                                <PlusMinusInput label='GB'
+                                                                value={item.data}
+                                                                onChange={(value) => this.onChangeData(value, this.props.dataModel, item)}
+                                                                onChangeInput={(event, data) => this.onChangeDataInput(this.props.dataModel, item, data)}
+                                                />
+                                            </Table.Cell>
                                         </Table.Row>
                                     ) :
                                     <Table.Row key='total'>
