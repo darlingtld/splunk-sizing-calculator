@@ -7,57 +7,67 @@ import indexer from '../assets/indexer.png';
 export default class ConfigVersionPanel extends Component {
     constructor(args) {
         super(args);
+        this.splunkVersions = [
+            {
+                text: '7.0 (Minty)',
+                value: '7.0',
+            },
+            {
+                text: '6.6 (Kimono)',
+                value: '6.6',
+            },
+            {
+                text: '6.5.1612 (Jackhammer)',
+                value: '6.5.1612',
+            },
+            {
+                text: '6.5 (Ivory)',
+                value: '6.5',
+            },
+            {
+                text: '6.4 (Galaxy)',
+                value: '6.4',
+            },
+            {
+                text: '6.3 (Ember)',
+                value: '6.3',
+            },
+            {
+                text: '6.2 (Dash)',
+                value: '6.2',
+            }
+        ];
+        this.esVersions = [
+            {
+                text: '4.7.2 (Exige)',
+                value: '4.7.2',
+            },
+            {
+                text: '4.4.0 (Caterham)',
+                value: '4.4.0',
+            },
+            {
+                text: '4.2.0 (Balboni)',
+                value: '4.2.0',
+            },
+            {
+                text: '4.1.0 (Apollo)',
+                value: '4.1.0',
+            }
+        ];
         this.state = {
-            splunkVersions: [
-                {
-                    text: '7.0 (Minty)',
-                    value: '7.0',
-                },
-                {
-                    text: '6.6 (Kimono)',
-                    value: '6.6',
-                },
-                {
-                    text: '6.5.1612 (Jackhammer)',
-                    value: '6.5.1612',
-                },
-                {
-                    text: '6.5 (Ivory)',
-                    value: '6.5',
-                },
-                {
-                    text: '6.4 (Galaxy)',
-                    value: '6.4',
-                },
-                {
-                    text: '6.3 (Ember)',
-                    value: '6.3',
-                },
-                {
-                    text: '6.2 (Dash)',
-                    value: '6.2',
-                }
-            ],
-            esVersions: [
-                {
-                    text: '4.7.2 (Exige)',
-                    value: '4.7.2',
-                },
-                {
-                    text: '4.4.0 (Caterham)',
-                    value: '4.4.0',
-                },
-                {
-                    text: '4.2.0 (Balboni)',
-                    value: '4.2.0',
-                },
-                {
-                    text: '4.1.0 (Apollo)',
-                    value: '4.1.0',
-                }
-            ]
+            splunkVersion: '7.0',
+            esVersion: '4.7.2'
         }
     }
+
+    onChangeSplunkVersion = (event, data) => {
+        this.setState({splunkVersion: data.value});
+    };
+
+    onChangeEsVersion = (event, data) => {
+        this.setState({esVersion: data.value});
+    };
 
     render() {
         return (
@@ -79,7 +89,11 @@ export default class ConfigVersionPanel extends Component {
                                 <span className='cinema'>Assuming the use of the latest maintenance versions.</span>
                             </Item.Meta>
                             <Item.Description>
-                                <Dropdown placeholder='Select Splunk enterprise version' fluid selection options={this.state.splunkVersions}/>
+                                <Dropdown placeholder='Select Splunk enterprise version' fluid selection
+                                          options={this.splunkVersions}
+                                          value={this.state.splunkVersion}
+                                          onChange={this.onChangeSplunkVersion}
+                                />
                             </Item.Description>
                         </Item.Content>
                     </Item>
@@ -99,7 +113,11 @@ export default class ConfigVersionPanel extends Component {
                                 <span className='cinema'>Assuming the use of the latest maintenance versions.</span>
                             </Item.Meta>
                             <Item.Description>
-                                <Dropdown placeholder='Select Enterprise security version' fluid selection options={this.state.esVersions}/>
+                                <Dropdown placeholder='Select Enterprise security version' fluid selection
+                                          options={this.esVersions}
+                                          value={this.state.esVersion}
+                                          onChange={this.onChangeEsVersion}
+                                />
                             </Item.Description>
                         </Item.Content>
                     </Item>
