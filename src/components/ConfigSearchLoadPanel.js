@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import {Segment, Dropdown, Item, Popup, Icon, Label, Button} from 'semantic-ui-react';
+import {Segment, Transition, Item, Popup, Icon, Label, Button} from 'semantic-ui-react';
 import PlusMinusInput from "./shared/PlusMinusInput";
-import {isPositiveNumber} from "./shared/Utils";
+import {isPositiveNumber, getRandomTransitionAnimation} from "./shared/Utils";
 import correlationSearches from '../assets/correlation_searches_color.png';
 import concurrentUsers from '../assets/concurrent_users.svg';
 
@@ -48,58 +48,60 @@ export default class ConfigSearchLoadPanel extends Component {
 
     render() {
         return (
-            <Segment>
-                <Item.Group relaxed={true}>
-                    <Item>
-                        <Item.Content>
-                            <Item.Header>
-                                Search Load
-                                <Popup
-                                    trigger={<Icon name='question circle' size='small'/>}
-                                    content='How a customer is using ES.'
-                                    size='small'
-                                    position='bottom center'
-                                    inverted
-                                />
-                            </Item.Header>
-                        </Item.Content>
-                    </Item>
-                    <Item.Group divided>
+            <Transition animation={getRandomTransitionAnimation()} duration={800} transitionOnMount={true}>
+                <Segment>
+                    <Item.Group relaxed={true}>
                         <Item>
-                            <Item.Image src={correlationSearches} size='tiny'/>
                             <Item.Content>
                                 <Item.Header>
-                                    Enabled Correlation Searches
-                                </Item.Header>
-                                <Item.Description>
-                                    <PlusMinusInput icon='map signs'
-                                                    value={this.state.correlationSearches}
-                                                    onChange={this.onChangeCorrelationSearches}
-                                                    onChangeInput={this.onChangeCorrelationSearchesInput}
+                                    Search Load
+                                    <Popup
+                                        trigger={<Icon name='question circle' size='small'/>}
+                                        content='How a customer is using ES.'
+                                        size='small'
+                                        position='bottom center'
+                                        inverted
                                     />
-                                </Item.Description>
+                                </Item.Header>
                             </Item.Content>
                         </Item>
+                        <Item.Group divided>
+                            <Item>
+                                <Item.Image src={correlationSearches} size='tiny'/>
+                                <Item.Content>
+                                    <Item.Header>
+                                        Enabled Correlation Searches
+                                    </Item.Header>
+                                    <Item.Description>
+                                        <PlusMinusInput icon='map signs'
+                                                        value={this.state.correlationSearches}
+                                                        onChange={this.onChangeCorrelationSearches}
+                                                        onChangeInput={this.onChangeCorrelationSearchesInput}
+                                        />
+                                    </Item.Description>
+                                </Item.Content>
+                            </Item>
 
-                        <Item>
-                            <Item.Image src={concurrentUsers} size='tiny'/>
+                            <Item>
+                                <Item.Image src={concurrentUsers} size='tiny'/>
 
-                            <Item.Content>
-                                <Item.Header>
-                                    Concurrent Users
-                                </Item.Header>
-                                <Item.Description>
-                                    <PlusMinusInput icon='users'
-                                                    value={this.state.concurrentUsers}
-                                                    onChange={this.onChangeConcurrentUsers}
-                                                    onChangeInput={this.onChangeConcurrentUsersInput}
-                                    />
-                                </Item.Description>
-                            </Item.Content>
-                        </Item>
+                                <Item.Content>
+                                    <Item.Header>
+                                        Concurrent Users
+                                    </Item.Header>
+                                    <Item.Description>
+                                        <PlusMinusInput icon='users'
+                                                        value={this.state.concurrentUsers}
+                                                        onChange={this.onChangeConcurrentUsers}
+                                                        onChangeInput={this.onChangeConcurrentUsersInput}
+                                        />
+                                    </Item.Description>
+                                </Item.Content>
+                            </Item>
+                        </Item.Group>
                     </Item.Group>
-                </Item.Group>
-            </Segment>
+                </Segment>
+            </Transition>
         )
     }
 }

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import {Segment, Table, Item, Popup, Icon, Radio, Statistic} from 'semantic-ui-react';
-import {isPositiveZeroNumber} from "./shared/Utils";
+import {Segment, Table, Item, Popup, Icon, Radio, Statistic, Transition} from 'semantic-ui-react';
+import {isPositiveZeroNumber, getRandomTransitionAnimation} from "./shared/Utils";
 import PlusMinusInput from "./shared/PlusMinusInput";
 import {findIndex, sumBy} from 'lodash';
 
@@ -108,7 +108,7 @@ export default class ConfigDataDistributionPanel extends Component {
 
     toggle = () => {
         // 'checked' is about to set to true.  At this line of code, it is false
-        if(!this.state.checked){
+        if (!this.state.checked) {
             this.updateTotalVolume();
         }
         this.setState({checked: !this.state.checked})
@@ -294,84 +294,86 @@ export default class ConfigDataDistributionPanel extends Component {
 
     render() {
         return (
-            <Segment>
-                <Item.Group relaxed={true}>
-                    <Item>
-                        <Item.Content>
-                            <Item.Header>
-                                Data Distribution Across {this.props.name} Data Model
-                                <Popup
-                                    trigger={<Icon name='question circle' size='small'/>}
-                                    content='The reference hardware specification is a baseline for scoping and scaling the Splunk platform for your use.'
-                                    size='small'
-                                    position='bottom center'
-                                    inverted
-                                />
-                            </Item.Header>
+            <Transition animation={getRandomTransitionAnimation()} duration={800} transitionOnMount={true}>
+                <Segment>
+                    <Item.Group relaxed={true}>
+                        <Item>
+                            <Item.Content>
+                                <Item.Header>
+                                    Data Distribution Across {this.props.name} Data Model
+                                    <Popup
+                                        trigger={<Icon name='question circle' size='small'/>}
+                                        content='The reference hardware specification is a baseline for scoping and scaling the Splunk platform for your use.'
+                                        size='small'
+                                        position='bottom center'
+                                        inverted
+                                    />
+                                </Item.Header>
 
-                        </Item.Content>
-                    </Item>
-                    <Item>
-                        <Item.Content style={{textAlign: 'right'}}>
-                            <Radio slider label='Sourcetype settings'
-                                   onChange={this.toggle}
-                                   checked={this.state.checked}/>
-                        </Item.Content>
-                    </Item>
-                    <Item>
-                        <Table basic='very' selectable>
-                            <Table.Header>
-                                <Table.Row>
-                                    <Table.HeaderCell>Sourcetype</Table.HeaderCell>
-                                    <Table.HeaderCell textAlign='center'>Data ingestion per day</Table.HeaderCell>
-                                </Table.Row>
-                            </Table.Header>
-                            <Table.Body>
-                                {this.state.checked ?
-                                    this.state[this.props.dataModel].map(item =>
-                                        <Table.Row key={item.value}>
-                                            <Table.Cell>{item.text}</Table.Cell>
+                            </Item.Content>
+                        </Item>
+                        <Item>
+                            <Item.Content style={{textAlign: 'right'}}>
+                                <Radio slider label='Sourcetype settings'
+                                       onChange={this.toggle}
+                                       checked={this.state.checked}/>
+                            </Item.Content>
+                        </Item>
+                        <Item>
+                            <Table basic='very' selectable>
+                                <Table.Header>
+                                    <Table.Row>
+                                        <Table.HeaderCell>Sourcetype</Table.HeaderCell>
+                                        <Table.HeaderCell textAlign='center'>Data ingestion per day</Table.HeaderCell>
+                                    </Table.Row>
+                                </Table.Header>
+                                <Table.Body>
+                                    {this.state.checked ?
+                                        this.state[this.props.dataModel].map(item =>
+                                            <Table.Row key={item.value}>
+                                                <Table.Cell>{item.text}</Table.Cell>
+                                                <Table.Cell textAlign='right'>
+                                                    <PlusMinusInput label='GB'
+                                                                    value={item.data}
+                                                                    onChange={(value) => this.onChangeData(value, this.props.dataModel, item)}
+                                                                    onChangeInput={(event, data) => this.onChangeDataInput(this.props.dataModel, item, data)}
+                                                    />
+                                                </Table.Cell>
+                                            </Table.Row>
+                                        ) :
+                                        <Table.Row key='total'>
+                                            <Table.Cell>Total</Table.Cell>
                                             <Table.Cell textAlign='right'>
                                                 <PlusMinusInput label='GB'
-                                                                value={item.data}
-                                                                onChange={(value) => this.onChangeData(value, this.props.dataModel, item)}
-                                                                onChangeInput={(event, data) => this.onChangeDataInput(this.props.dataModel, item, data)}
+                                                                value={this.state[this.props.dataModel + 'Total']}
+                                                                onChange={(value) => this.onChangeDataTotal(value, this.props.dataModel)}
+                                                                onChangeInput={(event, data) => this.onChangeDataTotalInput(this.props.dataModel, data)}
                                                 />
                                             </Table.Cell>
                                         </Table.Row>
-                                    ) :
-                                    <Table.Row key='total'>
-                                        <Table.Cell>Total</Table.Cell>
-                                        <Table.Cell textAlign='right'>
-                                            <PlusMinusInput label='GB'
-                                                            value={this.state[this.props.dataModel + 'Total']}
-                                                            onChange={(value) => this.onChangeDataTotal(value, this.props.dataModel)}
-                                                            onChangeInput={(event, data) => this.onChangeDataTotalInput(this.props.dataModel, data)}
-                                            />
-                                        </Table.Cell>
-                                    </Table.Row>
+                                    }
+                                </Table.Body>
+                                {this.state.checked ?
+                                    <Table.Footer>
+                                        <Table.Row>
+                                            <Table.HeaderCell>Total</Table.HeaderCell>
+                                            <Table.HeaderCell textAlign='right'>
+                                                <Statistic.Group horizontal size='tiny'
+                                                                 style={{float: 'right', marginRight: '48px'}}>
+                                                    <Statistic>
+                                                        <Statistic.Value>{this.state[this.props.dataModel + 'Total']}</Statistic.Value>
+                                                        <Statistic.Label>GB</Statistic.Label>
+                                                    </Statistic>
+                                                </Statistic.Group>
+                                            </Table.HeaderCell>
+                                        </Table.Row>
+                                    </Table.Footer> : null
                                 }
-                            </Table.Body>
-                            {this.state.checked ?
-                                <Table.Footer>
-                                    <Table.Row>
-                                        <Table.HeaderCell>Total</Table.HeaderCell>
-                                        <Table.HeaderCell textAlign='right'>
-                                            <Statistic.Group horizontal size='tiny'
-                                                             style={{float: 'right', marginRight: '48px'}}>
-                                                <Statistic>
-                                                    <Statistic.Value>{this.state[this.props.dataModel + 'Total']}</Statistic.Value>
-                                                    <Statistic.Label>GB</Statistic.Label>
-                                                </Statistic>
-                                            </Statistic.Group>
-                                        </Table.HeaderCell>
-                                    </Table.Row>
-                                </Table.Footer> : null
-                            }
-                        </Table>
-                    </Item>
-                </Item.Group>
-            </Segment>
+                            </Table>
+                        </Item>
+                    </Item.Group>
+                </Segment>
+            </Transition>
         )
     }
 }

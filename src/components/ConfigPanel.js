@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Grid, Menu, Segment, Icon} from 'semantic-ui-react';
+import {Grid, Menu, Icon} from 'semantic-ui-react';
 import './ConfigPanel.scss';
 import ConfigServerPanel from './ConfigServerPanel';
 import ConfigVersionPanel from './ConfigVersionPanel';

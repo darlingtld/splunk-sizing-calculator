@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import {Segment, Dropdown, Item, Popup, Icon, Label, Button} from 'semantic-ui-react';
+import {Segment, Dropdown, Item, Popup, Icon, Transition, Button} from 'semantic-ui-react';
 import PlusMinusInput from "./shared/PlusMinusInput";
-import {isPositiveNumber} from "./shared/Utils";
+import {isPositiveNumber, getRandomTransitionAnimation} from "./shared/Utils";
 import searchHead from '../assets/search_head_color.png';
 import indexer from '../assets/indexer_color.png';
 import marginOfError from '../assets/margin_of_error.png';
@@ -143,113 +143,115 @@ export default class ConfigServerPanel extends Component {
 
     render() {
         return (
-            <Segment>
-                <Item.Group relaxed={true}>
-                    <Item>
-                        <Item.Content>
-                            <Item.Header>
-                                Splunk Hardware Specification
-                                <Popup
-                                    trigger={<Icon name='question circle' size='small'/>}
-                                    content='The reference hardware specification is a baseline for scoping and scaling the Splunk platform for your use.'
-                                    size='small'
-                                    position='bottom center'
-                                    inverted
-                                />
-                            </Item.Header>
-                            <Item.Description>
-                                <Dropdown placeholder='Select Splunk hardware deployments' fluid selection
-                                          options={this.hardwareOptions}
-                                          value={this.state.hardware}
-                                          onChange={this.onChangeSplunkHardware}/>
-                            </Item.Description>
-
-                            <Item.Content
-                                as='a' style={{float: 'right'}}
-                                target='_blank'
-                                href='http://docs.splunk.com/Documentation/Splunk/latest/Capacity/Referencehardware'>
-                                Hardware reference document
-                                <Icon name='external'/>
-                            </Item.Content>
-                        </Item.Content>
-                    </Item>
-                    <Item.Group divided>
+            <Transition animation={getRandomTransitionAnimation()} duration={800} transitionOnMount={true}>
+                <Segment>
+                    <Item.Group relaxed={true}>
                         <Item>
-                            <Item.Image src={searchHead} size='tiny'/>
                             <Item.Content>
                                 <Item.Header>
-                                    Search Head
+                                    Splunk Hardware Specification
                                     <Popup
                                         trigger={<Icon name='question circle' size='small'/>}
-                                        content='Please use number of physical cores if you do not want your load average to exceed the number of physical CPUs. You may need to change max searches per cpu in limits.conf in order to get the max concurrent search limit to line up with what the indexers can support.'
+                                        content='The reference hardware specification is a baseline for scoping and scaling the Splunk platform for your use.'
                                         size='small'
                                         position='bottom center'
                                         inverted
-                                    /></Item.Header>
-                                <Item.Meta>
-                                    <span className='cinema'>Maximum processor cores</span>
-                                </Item.Meta>
-                                <Item.Description>
-                                    <PlusMinusInput icon='microchip'
-                                                    value={this.state.searchHeadCores}
-                                                    onChange={this.onChangeSearchHeadCores}
-                                                    onChangeInput={this.onChangeSearchHeadCoresInput}
                                     />
-                                </Item.Description>
-                            </Item.Content>
-                        </Item>
-
-                        <Item>
-                            <Item.Image src={indexer} size='tiny'/>
-
-                            <Item.Content>
-                                <Item.Header>Indexer
-                                    <Popup
-                                        trigger={<Icon name='question circle' size='small'/>}
-                                        content='Please use number of physical cores if you do not want your load average to exceed the number of physical CPUs.'
-                                        size='small'
-                                        position='bottom center'
-                                        inverted
-                                    /></Item.Header>
-                                <Item.Meta>
-                                    <span className='cinema'>Maximum processor cores</span>
-                                </Item.Meta>
+                                </Item.Header>
                                 <Item.Description>
-                                    <PlusMinusInput icon='microchip'
-                                                    value={this.state.indexerCores}
-                                                    onChange={this.onChangeIndexerCores}
-                                                    onChangeInput={this.onChangeIndexerCoresInput}
-                                    />
+                                    <Dropdown placeholder='Select Splunk hardware deployments' fluid selection
+                                              options={this.hardwareOptions}
+                                              value={this.state.hardware}
+                                              onChange={this.onChangeSplunkHardware}/>
                                 </Item.Description>
-                            </Item.Content>
-                        </Item>
 
-                        <Item>
-                            <Item.Image src={marginOfError} size='tiny'/>
-                            <Item.Content>
-                                <Item.Header>
-                                    Margin of Error %
-                                    <Popup
-                                        trigger={<Icon name='question circle' size='small'/>}
-                                        content='Margin of Error is a fudge factor. Increase it if you want to increase headroom or if you have apps besides ES. If the other app is about as heavyweight as ES, increase margin of error to 50%.'
-                                        size='small'
-                                        position='bottom center'
-                                        inverted
-                                    /></Item.Header>
-                                <Item.Meta>
-                                    <span className='cinema'>additional headroom</span>
-                                </Item.Meta>
-                                <Item.Description>
-                                    <PlusMinusInput icon='percent'
-                                                    value={this.state.marginOfError}
-                                                    onChange={this.onChangeMarginOfError}
-                                                    onChangeInput={this.onChangeMarginOfErrorInput}/>
-                                </Item.Description>
+                                <Item.Content
+                                    as='a' style={{float: 'right'}}
+                                    target='_blank'
+                                    href='http://docs.splunk.com/Documentation/Splunk/latest/Capacity/Referencehardware'>
+                                    Hardware reference document
+                                    <Icon name='external'/>
+                                </Item.Content>
                             </Item.Content>
                         </Item>
+                        <Item.Group divided>
+                            <Item>
+                                <Item.Image src={searchHead} size='tiny'/>
+                                <Item.Content>
+                                    <Item.Header>
+                                        Search Head
+                                        <Popup
+                                            trigger={<Icon name='question circle' size='small'/>}
+                                            content='Please use number of physical cores if you do not want your load average to exceed the number of physical CPUs. You may need to change max searches per cpu in limits.conf in order to get the max concurrent search limit to line up with what the indexers can support.'
+                                            size='small'
+                                            position='bottom center'
+                                            inverted
+                                        /></Item.Header>
+                                    <Item.Meta>
+                                        <span className='cinema'>Maximum processor cores</span>
+                                    </Item.Meta>
+                                    <Item.Description>
+                                        <PlusMinusInput icon='microchip'
+                                                        value={this.state.searchHeadCores}
+                                                        onChange={this.onChangeSearchHeadCores}
+                                                        onChangeInput={this.onChangeSearchHeadCoresInput}
+                                        />
+                                    </Item.Description>
+                                </Item.Content>
+                            </Item>
+
+                            <Item>
+                                <Item.Image src={indexer} size='tiny'/>
+
+                                <Item.Content>
+                                    <Item.Header>Indexer
+                                        <Popup
+                                            trigger={<Icon name='question circle' size='small'/>}
+                                            content='Please use number of physical cores if you do not want your load average to exceed the number of physical CPUs.'
+                                            size='small'
+                                            position='bottom center'
+                                            inverted
+                                        /></Item.Header>
+                                    <Item.Meta>
+                                        <span className='cinema'>Maximum processor cores</span>
+                                    </Item.Meta>
+                                    <Item.Description>
+                                        <PlusMinusInput icon='microchip'
+                                                        value={this.state.indexerCores}
+                                                        onChange={this.onChangeIndexerCores}
+                                                        onChangeInput={this.onChangeIndexerCoresInput}
+                                        />
+                                    </Item.Description>
+                                </Item.Content>
+                            </Item>
+
+                            <Item>
+                                <Item.Image src={marginOfError} size='tiny'/>
+                                <Item.Content>
+                                    <Item.Header>
+                                        Margin of Error %
+                                        <Popup
+                                            trigger={<Icon name='question circle' size='small'/>}
+                                            content='Margin of Error is a fudge factor. Increase it if you want to increase headroom or if you have apps besides ES. If the other app is about as heavyweight as ES, increase margin of error to 50%.'
+                                            size='small'
+                                            position='bottom center'
+                                            inverted
+                                        /></Item.Header>
+                                    <Item.Meta>
+                                        <span className='cinema'>additional headroom</span>
+                                    </Item.Meta>
+                                    <Item.Description>
+                                        <PlusMinusInput icon='percent'
+                                                        value={this.state.marginOfError}
+                                                        onChange={this.onChangeMarginOfError}
+                                                        onChangeInput={this.onChangeMarginOfErrorInput}/>
+                                    </Item.Description>
+                                </Item.Content>
+                            </Item>
+                        </Item.Group>
                     </Item.Group>
-                </Item.Group>
-            </Segment>
+                </Segment>
+            </Transition>
         )
     }
 }
