@@ -20,8 +20,9 @@ export default class SliderBar extends Component {
         this.setState({
             sliderValue: value,
             value: Math.floor(value / 10)
-        })
-    }
+        });
+        this.props.onChange(Math.floor(value / 10));
+    };
 
     render() {
         const {sliderValue, min, max, sliderColor} = this.state;
