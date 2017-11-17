@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Segment, Dropdown, Item, Popup, Icon, Label, Button} from 'semantic-ui-react';
 import PlusMinusInput from "./shared/PlusMinusInput";
+import {isPositiveNumber} from "./shared/Utils";
 import searchHead from '../assets/search_head_color.png';
 import indexer from '../assets/indexer_color.png';
 import marginOfError from '../assets/margin_of_error.png';
@@ -8,46 +9,137 @@ import marginOfError from '../assets/margin_of_error.png';
 export default class ConfigServerPanel extends Component {
     constructor(args) {
         super(args);
+        this.hardwareOptions = [
+            {
+                text: 'Single instance deployments',
+                value: 'single',
+                icon: 'block layout',
+            },
+            {
+                text: 'Distributed deployments - Base',
+                value: 'distribution_base',
+                icon: 'sitemap',
+            },
+            {
+                text: 'Distributed deployments - Mid range',
+                value: 'distribution_mid',
+                icon: 'sitemap',
+            },
+            {
+                text: 'Distributed deployments - High performance',
+                value: 'distribution_high',
+                icon: 'sitemap',
+            },
+            {
+                text: 'Cloud deployments - Small scale',
+                value: 'cloud_small',
+                icon: 'cloud',
+            },
+            {
+                text: 'Cloud deployments - Medium scale',
+                value: 'cloud_med',
+                icon: 'cloud',
+            },
+            {
+                text: 'Cloud deployments - Large scale',
+                value: 'cloud_large',
+                icon: 'cloud',
+            }
+        ];
+        this.hardwareCoresMap = {
+            single: {
+                searchHeadCores: 12,
+                indexerCores: 12
+            },
+            distribution_base: {
+                searchHeadCores: 16,
+                indexerCores: 12
+            },
+            distribution_mid: {
+                searchHeadCores: 12,
+                indexerCores: 24
+            },
+            distribution_high: {
+                searchHeadCores: 16,
+                indexerCores: 48
+            },
+            cloud_small: {
+                searchHeadCores: 8,
+                indexerCores: 8
+            },
+            cloud_med: {
+                searchHeadCores: 18,
+                indexerCores: 18
+            },
+            cloud_large: {
+                searchHeadCores: 18,
+                indexerCores: 18
+            }
+        };
+
         this.state = {
-            options: [
-                {
-                    text: 'Single instance deployments',
-                    value: 'Single instance deployments',
-                    icon: 'block layout',
-                },
-                {
-                    text: 'Distributed deployments - Base',
-                    value: 'Distributed deployments - Base',
-                    icon: 'sitemap',
-                },
-                {
-                    text: 'Distributed deployments - Mid range',
-                    value: 'Distributed deployments - Mid range',
-                    icon: 'sitemap',
-                },
-                {
-                    text: 'Distributed deployments - High performance',
-                    value: 'Distributed deployments - High performance',
-                    icon: 'sitemap',
-                },
-                {
-                    text: 'Cloud deployments - Small scale',
-                    value: 'Cloud deployments - Small scale',
-                    icon: 'cloud',
-                },
-                {
-                    text: 'Cloud deployments - Medium scale',
-                    value: 'Cloud deployments - Medium scale',
-                    icon: 'cloud',
-                },
-                {
-                    text: 'Cloud deployments - Large scale',
-                    value: 'Cloud deployments - Large scale',
-                    icon: 'cloud',
-                }
-            ]
+            hardware: this.hardwareOptions[0].value,
+            searchHeadCores: 12,
+            indexerCores: 12,
+            marginOfError: 20
         }
     }
+
+    onChangeSplunkHardware = (event, data) => {
+        this.setState({
+            hardware: data.value,
+            searchHeadCores: this.hardwareCoresMap[data.value].searchHeadCores,
+            indexerCores: this.hardwareCoresMap[data.value].indexerCores
+        })
+    };
+
+    onChangeSearchHeadCores = (value) => {
+        if (value === 'plus') {
+            this.setState({searchHeadCores: this.state.searchHeadCores + 1})
+        } else {
+            if (isPositiveNumber(this.state.searchHeadCores - 1)) {
+                this.setState({searchHeadCores: this.state.searchHeadCores - 1})
+            }
+        }
+    };
+
+    onChangeIndexerCores = (value) => {
+        if (value === 'plus') {
+            this.setState({indexerCores: this.state.indexerCores + 1})
+        } else {
+            if (isPositiveNumber(this.state.indexerCores - 1)) {
+                this.setState({indexerCores: this.state.indexerCores - 1})
+            }
+        }
+    };
+
+    onChangeMarginOfError = (value) => {
+        if (value === 'plus') {
+            this.setState({marginOfError: this.state.marginOfError + 1})
+        } else {
+            if (isPositiveNumber(this.state.marginOfError - 1)) {
+                this.setState({marginOfError: this.state.marginOfError - 1})
+            }
+        }
+    };
+
+    onChangeSearchHeadCoresInput = (event, data) => {
+        if (isPositiveNumber(data.value)) {
+            this.setState({searchHeadCores: parseInt(data.value)})
+        }
+    };
+
+    onChangeIndexerCoresInput = (event, data) => {
+        if (isPositiveNumber(data.value)) {
+            this.setState({indexerCores: parseInt(data.value)})
+        }
+    };
+
+    onChangeMarginOfErrorInput = (event, data) => {
+        if (isPositiveNumber(data.value)) {
+            this.setState({marginOfError: parseInt(data.value)})
+        }
+    };
 
     render() {
         return (
@@ -66,11 +158,14 @@ export default class ConfigServerPanel extends Component {
                                 />
                             </Item.Header>
                             <Item.Description>
-                                <Dropdown placeholder='Select Splunk hardware deployments' fluid selection options={this.state.options}/>
+                                <Dropdown placeholder='Select Splunk hardware deployments' fluid selection
+                                          options={this.hardwareOptions}
+                                          value={this.state.hardware}
+                                          onChange={this.onChangeSplunkHardware}/>
                             </Item.Description>
 
                             <Item.Content
-                                as='a' style={{float:'right'}}
+                                as='a' style={{float: 'right'}}
                                 target='_blank'
                                 href='http://docs.splunk.com/Documentation/Splunk/latest/Capacity/Referencehardware'>
                                 Hardware reference document
@@ -80,7 +175,7 @@ export default class ConfigServerPanel extends Component {
                     </Item>
                     <Item.Group divided>
                         <Item>
-                            <Item.Image src={searchHead} size='tiny' />
+                            <Item.Image src={searchHead} size='tiny'/>
                             <Item.Content>
                                 <Item.Header>
                                     Search Head
@@ -94,7 +189,13 @@ export default class ConfigServerPanel extends Component {
                                 <Item.Meta>
                                     <span className='cinema'>Maximum processor cores</span>
                                 </Item.Meta>
-                                <Item.Description><PlusMinusInput icon='microchip'/></Item.Description>
+                                <Item.Description>
+                                    <PlusMinusInput icon='microchip'
+                                                    value={this.state.searchHeadCores}
+                                                    onChange={this.onChangeSearchHeadCores}
+                                                    onChangeInput={this.onChangeSearchHeadCoresInput}
+                                    />
+                                </Item.Description>
                             </Item.Content>
                         </Item>
 
@@ -113,7 +214,13 @@ export default class ConfigServerPanel extends Component {
                                 <Item.Meta>
                                     <span className='cinema'>Maximum processor cores</span>
                                 </Item.Meta>
-                                <Item.Description><PlusMinusInput icon='microchip'/></Item.Description>
+                                <Item.Description>
+                                    <PlusMinusInput icon='microchip'
+                                                    value={this.state.indexerCores}
+                                                    onChange={this.onChangeIndexerCores}
+                                                    onChangeInput={this.onChangeIndexerCoresInput}
+                                    />
+                                </Item.Description>
                             </Item.Content>
                         </Item>
 
@@ -132,7 +239,12 @@ export default class ConfigServerPanel extends Component {
                                 <Item.Meta>
                                     <span className='cinema'>additional headroom</span>
                                 </Item.Meta>
-                                <Item.Description><PlusMinusInput icon='percent'/></Item.Description>
+                                <Item.Description>
+                                    <PlusMinusInput icon='percent'
+                                                    value={this.state.marginOfError}
+                                                    onChange={this.onChangeMarginOfError}
+                                                    onChangeInput={this.onChangeMarginOfErrorInput}/>
+                                </Item.Description>
                             </Item.Content>
                         </Item>
                     </Item.Group>

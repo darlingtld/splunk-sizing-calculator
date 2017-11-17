@@ -1,12 +1,16 @@
 {
   "name": "splunk-sizing-calculator",
-  "version": "1.0.0",
+  "version": "2.1.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "dev": "webpack-dev-server --hot --history-api-fallback --open"
   },
-  "keywords": [],
+  "keywords": [
+    "splunk",
+    "sizing",
+    "calculator"
+  ],
   "author": "Lingda Tang <lingda@splunk.com>",
   "dependencies": {
     "css-loader": "^0.28.7",
