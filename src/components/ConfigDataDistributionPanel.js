@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import {Segment, Table, Item, Popup, Icon, Radio, Input} from 'semantic-ui-react';
+import {Segment, Table, Item, Popup, Icon, Radio, Statistic} from 'semantic-ui-react';
 import {isPositiveZeroNumber} from "./shared/Utils";
 import PlusMinusInput from "./shared/PlusMinusInput";
-import {merge, findIndex} from 'lodash';
+import {findIndex, sumBy} from 'lodash';
 
 export default class ConfigDataDistributionPanel extends Component {
     constructor(args) {
@@ -106,10 +106,15 @@ export default class ConfigDataDistributionPanel extends Component {
         }
     }
 
-    toggle = () => this.setState({checked: !this.state.checked});
+    toggle = () => {
+        // 'checked' is about to set to true.  At this line of code, it is false
+        if(!this.state.checked){
+            this.updateTotalVolume();
+        }
+        this.setState({checked: !this.state.checked})
+    };
 
     onChangeData = (value, dataModel, item) => {
-        console.log(value, dataModel, item);
         if (value === 'plus') {
             item.data = item.data + 1;
             let index;
@@ -171,6 +176,76 @@ export default class ConfigDataDistributionPanel extends Component {
                 }
             }
         }
+        this.updateTotalVolume();
+    };
+
+    onChangeDataTotal = (value, dataModel) => {
+        if (value === 'plus') {
+            switch (dataModel) {
+                case 'networkTraffic':
+                    this.setState({
+                        networkTrafficTotal: this.state.networkTrafficTotal + 1
+                    });
+                    break;
+                case 'authentication':
+                    this.setState({
+                        authenticationTotal: this.state.authenticationTotal + 1
+                    });
+                    break;
+                case 'web':
+                    this.setState({
+                        webTotal: this.state.webTotal + 1
+                    });
+                    break;
+            }
+        } else {
+            switch (dataModel) {
+                case 'networkTraffic':
+                    if (isPositiveZeroNumber(this.state.networkTrafficTotal - 1)) {
+                        this.setState({
+                            networkTrafficTotal: parseInt(this.state.networkTrafficTotal - 1)
+                        });
+                    }
+                    break;
+                case 'authentication':
+                    if (isPositiveZeroNumber(this.state.authenticationTotal - 1)) {
+                        this.setState({
+                            authenticationTotal: parseInt(this.state.authenticationTotal - 1)
+                        });
+                    }
+                    break;
+                case 'web':
+                    if (isPositiveZeroNumber(this.state.webTotal - 1)) {
+                        this.setState({
+                            webTotal: parseInt(this.state.webTotal - 1)
+                        });
+                    }
+                    break;
+            }
+        }
+    };
+
+    onChangeDataTotalInput = (dataModel, data) => {
+        if (!isPositiveZeroNumber(data.value)) {
+            return;
+        }
+        switch (dataModel) {
+            case 'networkTraffic':
+                this.setState({
+                    networkTrafficTotal: parseInt(data.value)
+                });
+                break;
+            case 'authentication':
+                this.setState({
+                    authenticationTotal: parseInt(data.value)
+                });
+                break;
+            case 'web':
+                this.setState({
+                    webTotal: parseInt(data.value)
+                });
+                break;
+        }
     };
 
     onChangeDataInput = (dataModel, item, data) => {
@@ -205,6 +280,16 @@ export default class ConfigDataDistributionPanel extends Component {
                 });
                 break;
         }
+        this.updateTotalVolume();
+    };
+
+    updateTotalVolume = () => {
+        this.setState({
+            networkTrafficTotal: sumBy(this.state.networkTraffic, 'data'),
+            authenticationTotal: sumBy(this.state.authentication, 'data'),
+            webTotal: sumBy(this.state.web, 'data')
+        })
+
     };
 
     render() {
@@ -257,7 +342,13 @@ export default class ConfigDataDistributionPanel extends Component {
                                     ) :
                                     <Table.Row key='total'>
                                         <Table.Cell>Total</Table.Cell>
-                                        <Table.Cell textAlign='right'><PlusMinusInput label='GB'/></Table.Cell>
+                                        <Table.Cell textAlign='right'>
+                                            <PlusMinusInput label='GB'
+                                                            value={this.state[this.props.dataModel + 'Total']}
+                                                            onChange={(value) => this.onChangeDataTotal(value, this.props.dataModel)}
+                                                            onChangeInput={(event, data) => this.onChangeDataTotalInput(this.props.dataModel, data)}
+                                            />
+                                        </Table.Cell>
                                     </Table.Row>
                                 }
                             </Table.Body>
@@ -266,7 +357,13 @@ export default class ConfigDataDistributionPanel extends Component {
                                     <Table.Row>
                                         <Table.HeaderCell>Total</Table.HeaderCell>
                                         <Table.HeaderCell textAlign='right'>
-                                            <Input label={{basic: true, content: 'GB'}} labelPosition='right'/>
+                                            <Statistic.Group horizontal size='tiny'
+                                                             style={{float: 'right', marginRight: '48px'}}>
+                                                <Statistic>
+                                                    <Statistic.Value>{this.state[this.props.dataModel + 'Total']}</Statistic.Value>
+                                                    <Statistic.Label>GB</Statistic.Label>
+                                                </Statistic>
+                                            </Statistic.Group>
                                         </Table.HeaderCell>
                                     </Table.Row>
                                 </Table.Footer> : null
