@@ -1,13 +1,50 @@
 import React, {Component} from 'react';
 import {Segment, Dropdown, Item, Popup, Icon, Label, Button} from 'semantic-ui-react';
 import PlusMinusInput from "./shared/PlusMinusInput";
+import {isPositiveNumber} from "./shared/Utils";
 import correlationSearches from '../assets/correlation_searches_color.png';
 import concurrentUsers from '../assets/concurrent_users.svg';
 
 export default class ConfigSearchLoadPanel extends Component {
     constructor(args) {
         super(args);
+        this.state = {
+            correlationSearches: 20,
+            concurrentUsers: 6
+        }
     }
+
+    onChangeCorrelationSearches = (value) => {
+        if (value === 'plus') {
+            this.setState({correlationSearches: this.state.correlationSearches + 1})
+        } else {
+            if (isPositiveNumber(this.state.correlationSearches - 1)) {
+                this.setState({correlationSearches: this.state.correlationSearches - 1})
+            }
+        }
+    };
+
+    onChangeConcurrentUsers = (value) => {
+        if (value === 'plus') {
+            this.setState({concurrentUsers: this.state.concurrentUsers + 1})
+        } else {
+            if (isPositiveNumber(this.state.concurrentUsers - 1)) {
+                this.setState({concurrentUsers: this.state.concurrentUsers - 1})
+            }
+        }
+    };
+
+    onChangeCorrelationSearchesInput = (event, data) => {
+        if (isPositiveNumber(data.value)) {
+            this.setState({correlationSearches: parseInt(data.value)})
+        }
+    };
+
+    onChangeConcurrentUsersInput = (event, data) => {
+        if (isPositiveNumber(data.value)) {
+            this.setState({concurrentUsers: parseInt(data.value)})
+        }
+    };
 
     render() {
         return (
@@ -34,7 +71,13 @@ export default class ConfigSearchLoadPanel extends Component {
                                 <Item.Header>
                                     Enabled Correlation Searches
                                 </Item.Header>
-                                <Item.Description><PlusMinusInput icon='map signs'/></Item.Description>
+                                <Item.Description>
+                                    <PlusMinusInput icon='map signs'
+                                                    value={this.state.correlationSearches}
+                                                    onChange={this.onChangeCorrelationSearches}
+                                                    onChangeInput={this.onChangeCorrelationSearchesInput}
+                                    />
+                                </Item.Description>
                             </Item.Content>
                         </Item>
 
@@ -45,7 +88,13 @@ export default class ConfigSearchLoadPanel extends Component {
                                 <Item.Header>
                                     Concurrent Users
                                 </Item.Header>
-                                <Item.Description><PlusMinusInput icon='users'/></Item.Description>
+                                <Item.Description>
+                                    <PlusMinusInput icon='users'
+                                                    value={this.state.concurrentUsers}
+                                                    onChange={this.onChangeConcurrentUsers}
+                                                    onChangeInput={this.onChangeConcurrentUsersInput}
+                                    />
+                                </Item.Description>
                             </Item.Content>
                         </Item>
                     </Item.Group>
