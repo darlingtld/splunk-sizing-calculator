@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Segment, Table, Item, Popup, Icon, Radio, Statistic, Transition} from 'semantic-ui-react';
 import {isPositiveZeroNumber, getRandomTransitionAnimation} from "./shared/Utils";
 import PlusMinusInput from "./shared/PlusMinusInput";
-import {findIndex, sumBy} from 'lodash';
+import {findIndex, sumBy, assign} from 'lodash';
 
 export default class ConfigDataDistributionPanel extends Component {
     constructor(args) {
@@ -103,7 +103,13 @@ export default class ConfigDataDistributionPanel extends Component {
             networkTrafficTotal: 0,
             authenticationTotal: 0,
             webTotal: 0
-        }
+        };
+        assign(this.props.data, this.state);
+    }
+
+    componentDidUpdate(){
+        assign(this.props.data, this.state);
+        console.log(this.props.data);
     }
 
     toggle = () => {

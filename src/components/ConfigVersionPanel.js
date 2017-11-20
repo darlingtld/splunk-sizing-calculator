@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Segment, Dropdown, Item, Popup, Icon, Transition, Button} from 'semantic-ui-react';
 import {getRandomTransitionAnimation} from "./shared/Utils";
-
+import {assign} from 'lodash';
 
 export default class ConfigVersionPanel extends Component {
     constructor(args) {
@@ -57,7 +57,13 @@ export default class ConfigVersionPanel extends Component {
         this.state = {
             splunkVersion: '7.0',
             esVersion: '4.7.2'
-        }
+        };
+        assign(this.props.data, this.state);
+    }
+
+    componentDidUpdate(){
+        assign(this.props.data, this.state);
+        console.log(this.props.data);
     }
 
     onChangeSplunkVersion = (event, data) => {

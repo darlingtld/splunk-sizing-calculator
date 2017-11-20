@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Segment, Statistic, Item, Transition, Radio, Divider} from 'semantic-ui-react';
 import SliderBar from "./shared/SliderBar";
 import {getRandomTransitionAnimation} from "./shared/Utils";
+import {assign} from 'lodash';
 
 export default class ConfigParallelTuningPanel extends Component {
     constructor(args) {
@@ -13,6 +14,13 @@ export default class ConfigParallelTuningPanel extends Component {
             authenticationConcurrency: 3,
             webConcurrency: 3
         }
+        assign(this.props.data, this.state);
+
+    }
+
+    componentDidUpdate(){
+        assign(this.props.data, this.state);
+        console.log(this.props.data);
     }
 
     toggleEnable = () => this.setState({enableChecked: !this.state.enableChecked});

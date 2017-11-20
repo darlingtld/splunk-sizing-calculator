@@ -48,19 +48,19 @@ export default class ConfigPanel extends Component {
     renderConfigItemPanel = activeItem => {
         switch (activeItem) {
             case 'Server Specifications':
-                return <ConfigServerPanel/>;
+                return <ConfigServerPanel data={this.props.data}/>;
             case 'Splunk Enterprise Version':
-                return <ConfigVersionPanel/>;
+                return <ConfigVersionPanel data={this.props.data}/>;
             case 'Search Load':
-                return <ConfigSearchLoadPanel/>;
+                return <ConfigSearchLoadPanel data={this.props.data}/>;
             case 'Network Traffic':
-                return <ConfigDataDistributionPanel name='Network Traffic' dataModel='networkTraffic'/>;
+                return <ConfigDataDistributionPanel name='Network Traffic' dataModel='networkTraffic' data={this.props.data}/>;
             case 'Authentication':
-                return <ConfigDataDistributionPanel name='Authentication' dataModel='authentication'/>;
+                return <ConfigDataDistributionPanel name='Authentication' dataModel='authentication' data={this.props.data}/>;
             case 'Web':
-                return <ConfigDataDistributionPanel name='Web' dataModel='web'/>;
+                return <ConfigDataDistributionPanel name='Web' dataModel='web' data={this.props.data}/>;
             case 'Parallel Configuration Tuning':
-                return <ConfigParallelTuningPanel/>;
+                return <ConfigParallelTuningPanel data={this.props.data}/>;
         }
 
     };

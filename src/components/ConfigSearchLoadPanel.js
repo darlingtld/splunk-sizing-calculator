@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Segment, Transition, Item, Popup, Icon, Label, Button} from 'semantic-ui-react';
 import PlusMinusInput from "./shared/PlusMinusInput";
 import {isPositiveNumber, getRandomTransitionAnimation} from "./shared/Utils";
+import {assign} from 'lodash';
 import correlationSearches from '../assets/correlation_searches_color.png';
 import concurrentUsers from '../assets/concurrent_users.svg';
 
@@ -11,7 +12,14 @@ export default class ConfigSearchLoadPanel extends Component {
         this.state = {
             correlationSearches: 20,
             concurrentUsers: 6
-        }
+        };
+        assign(this.props.data, this.state);
+
+    }
+
+    componentDidUpdate(){
+        assign(this.props.data, this.state);
+        console.log(this.props.data);
     }
 
     onChangeCorrelationSearches = (value) => {

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Statistic, Grid} from 'semantic-ui-react';
+import {Statistic, Grid, Button, Icon} from 'semantic-ui-react';
 import './ResourcePanel.scss';
 import ConfigVizPanel from "./ConfigVizPanel";
 
@@ -7,6 +7,10 @@ export default class ResourcePanel extends Component {
     constructor(args) {
         super(args);
     }
+
+    doCalculate=()=>{
+
+    };
 
     render() {
         return (
@@ -28,6 +32,17 @@ export default class ResourcePanel extends Component {
                                     <Statistic.Label>Indexers</Statistic.Label>
                                 </Statistic>
                             </Statistic.Group>
+                        </Grid.Column>
+                        <Grid.Column width={6} verticalAlign='middle'>
+                            <Button animated='fade' size='large' color='green' onClick={this.doCalculate}>
+                                <Button.Content visible>
+                                    <Icon name='calculator'/>
+                                    Calculate
+                                </Button.Content>
+                                <Button.Content hidden>
+                                    ES Sizing
+                                </Button.Content>
+                            </Button>
                         </Grid.Column>
                     </Grid.Row>
                     <Grid.Row>

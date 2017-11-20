@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Segment, Dropdown, Item, Popup, Icon, Transition, Button} from 'semantic-ui-react';
 import PlusMinusInput from "./shared/PlusMinusInput";
 import {isPositiveNumber, getRandomTransitionAnimation} from "./shared/Utils";
+import {assign} from 'lodash';
 import searchHead from '../assets/search_head_color.png';
 import indexer from '../assets/indexer_color.png';
 import marginOfError from '../assets/margin_of_error.png';
@@ -82,7 +83,13 @@ export default class ConfigServerPanel extends Component {
             searchHeadCores: 12,
             indexerCores: 12,
             marginOfError: 20
-        }
+        };
+        assign(this.props.data, this.state);
+    }
+
+    componentDidUpdate(){
+        assign(this.props.data, this.state);
+        console.log(this.props.data);
     }
 
     onChangeSplunkHardware = (event, data) => {
@@ -90,27 +97,28 @@ export default class ConfigServerPanel extends Component {
             hardware: data.value,
             searchHeadCores: this.hardwareCoresMap[data.value].searchHeadCores,
             indexerCores: this.hardwareCoresMap[data.value].indexerCores
-        })
+        });
     };
 
     onChangeSearchHeadCores = (value) => {
         if (value === 'plus') {
-            this.setState({searchHeadCores: this.state.searchHeadCores + 1})
+            this.setState({searchHeadCores: this.state.searchHeadCores + 1});
         } else {
             if (isPositiveNumber(this.state.searchHeadCores - 1)) {
-                this.setState({searchHeadCores: this.state.searchHeadCores - 1})
+                this.setState({searchHeadCores: this.state.searchHeadCores - 1});
             }
         }
     };
 
     onChangeIndexerCores = (value) => {
         if (value === 'plus') {
-            this.setState({indexerCores: this.state.indexerCores + 1})
+            this.setState({indexerCores: this.state.indexerCores + 1});
         } else {
             if (isPositiveNumber(this.state.indexerCores - 1)) {
-                this.setState({indexerCores: this.state.indexerCores - 1})
+                this.setState({indexerCores: this.state.indexerCores - 1});
             }
         }
+
     };
 
     onChangeMarginOfError = (value) => {
