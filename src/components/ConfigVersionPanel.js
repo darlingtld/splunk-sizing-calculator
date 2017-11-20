@@ -26,14 +26,6 @@ export default class ConfigVersionPanel extends Component {
             {
                 text: '6.4 (Galaxy)',
                 value: '6.4',
-            },
-            {
-                text: '6.3 (Ember)',
-                value: '6.3',
-            },
-            {
-                text: '6.2 (Dash)',
-                value: '6.2',
             }
         ];
         this.esVersions = [

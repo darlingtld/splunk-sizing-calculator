@@ -27,11 +27,26 @@ export default class ConfigParallelTuningPanel extends Component {
 
     toggleAutoTuning = () => this.setState({autoTuningChecked: !this.state.autoTuningChecked});
 
-    onChangeNetworkTrafficConcurrency = (value) => this.setState({networkTrafficConcurrency: value});
+    onChangeNetworkTrafficConcurrency = (value) => this.setState({networkTrafficConcurrency: this.adjustValue(value)});
 
-    onChangeAuthenticationConcurrency = (value) => this.setState({authenticationConcurrency: value});
+    onChangeAuthenticationConcurrency = (value) => this.setState({authenticationConcurrency: this.adjustValue(value)});
 
-    onChangeWebConcurrency = (value) => this.setState({webConcurrency: value});
+    onChangeWebConcurrency = (value) => this.setState({webConcurrency: this.adjustValue(value)});
+
+    adjustValue = (value) => {
+        if (value >= 20) {
+            return 20;
+        } else if (value >= 10) {
+            return 10;
+        } else if (value >= 5) {
+            return 5;
+        } else if (value >= 3) {
+            return 3;
+        } else {
+            return 3;
+        }
+
+    };
 
     render() {
         return (
@@ -75,7 +90,8 @@ export default class ConfigParallelTuningPanel extends Component {
                                         Select max Network Traffic concurrency.
                                     </Item.Meta>
                                     <Item.Description>
-                                        <SliderBar onChange={this.onChangeNetworkTrafficConcurrency} data={this.props.data} domain='networkTrafficSlider'/>
+                                        <SliderBar onChange={this.onChangeNetworkTrafficConcurrency}
+                                                   data={this.props.data} domain='networkTrafficSlider'/>
                                     </Item.Description>
                                 </Item.Content>
                             </Item>
@@ -92,7 +108,8 @@ export default class ConfigParallelTuningPanel extends Component {
                                         Select max Authentication concurrency.
                                     </Item.Meta>
                                     <Item.Description>
-                                        <SliderBar onChange={this.onChangeAuthenticationConcurrency} data={this.props.data} domain='authenticationSlider'/>
+                                        <SliderBar onChange={this.onChangeAuthenticationConcurrency}
+                                                   data={this.props.data} domain='authenticationSlider'/>
                                     </Item.Description>
                                 </Item.Content>
                             </Item>
@@ -109,7 +126,8 @@ export default class ConfigParallelTuningPanel extends Component {
                                         Select max Web concurrency.
                                     </Item.Meta>
                                     <Item.Description>
-                                        <SliderBar onChange={this.onChangeWebConcurrency} data={this.props.data} domain='webSlider'/>
+                                        <SliderBar onChange={this.onChangeWebConcurrency} data={this.props.data}
+                                                   domain='webSlider'/>
                                     </Item.Description>
                                 </Item.Content>
                             </Item>

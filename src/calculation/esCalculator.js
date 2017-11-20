@@ -122,7 +122,7 @@ function calculate(inputs) {
     }
     let totalVolume = ntVolume + webVolume + authVolume;
 
-    sv = inputs.sv;
+    let sv = inputs.sv;
     let ntCapacity = sv.networkTrafficCapacity;
     let webCapacity = sv.webCapacity;
     let authCapacity = sv.authenticationCapacity;
@@ -140,49 +140,49 @@ function calculate(inputs) {
     let marginOfError = inputs.marginOfError / 100;
 
     let parallelTuning = inputs.parallelTuning;
-    if (sv.version == "7.0" && parallelTuning.enabled) {
-        if (parallelTuning.networkTrafficParalleliation == 10) {
+    if (sv.version === "7.0" && parallelTuning.enabled) {
+        if (parallelTuning.networkTrafficParalleliation === 10) {
             ntParalleliation = 10;
             ntCapacity = sv.networkTrafficParallel10Capacity;
-        } else if (parallelTuning.networkTrafficParalleliation == 20) {
+        } else if (parallelTuning.networkTrafficParalleliation === 20) {
             ntParalleliation = 20;
             ntCapacity = sv.networkTrafficParallel20Capacity;
-        } else if (parallelTuning.networkTrafficParalleliation == 3) {
+        } else if (parallelTuning.networkTrafficParalleliation === 3) {
             ntParalleliation = 3;
             ntCapacity = sv.networkTrafficParallel3Capacity;
-        } else if (parallelTuning.networkTrafficParalleliation == 5) {
+        } else if (parallelTuning.networkTrafficParalleliation === 5) {
             ntParalleliation = 5;
             ntCapacity = sv.networkTrafficParallel5Capacity;
         } else {
 
         }
 
-        if (parallelTuning.webParalleliation == 10) {
+        if (parallelTuning.webParalleliation === 10) {
             webParalleliation = 10;
             webCapacity = sv.webParallel10Capacity;
-        } else if (parallelTuning.webParalleliation == 20) {
+        } else if (parallelTuning.webParalleliation === 20) {
             webParalleliation = 20;
             webCapacity = sv.webParallel20Capacity;
-        } else if (parallelTuning.webParalleliation == 3) {
+        } else if (parallelTuning.webParalleliation === 3) {
             webParalleliation = 3;
             webCapacity = sv.webParallel3Capacity;
-        } else if (parallelTuning.webParalleliation == 5) {
+        } else if (parallelTuning.webParalleliation === 5) {
             webParalleliation = 5;
             webCapacity = sv.webParallel5Capacity;
         } else {
 
         }
 
-        if (parallelTuning.authenticationParalleliation == 10) {
+        if (parallelTuning.authenticationParalleliation === 10) {
             authParalleliation = 10;
             authCapacity = sv.authenticationParallel10Capacity;
-        } else if (parallelTuning.authenticationParalleliation == 20) {
+        } else if (parallelTuning.authenticationParalleliation === 20) {
             authParalleliation = 20;
             authCapacity = sv.authenticationParallel20Capacity;
-        } else if (parallelTuning.authenticationParalleliation == 3) {
+        } else if (parallelTuning.authenticationParalleliation === 3) {
             authParalleliation = 3;
             authCapacity = sv.authenticationParallel3Capacity;
-        } else if (parallelTuning.authenticationParalleliation == 5) {
+        } else if (parallelTuning.authenticationParalleliation === 5) {
             authParalleliation = 5;
             authCapacity = sv.authenticationParallel5Capacity;
         }
@@ -223,7 +223,7 @@ function calculate(inputs) {
         let authCPUPerIndexer = authVolume / currentIndexers / authActualCapacity * authParalleliation;
         let splunkdCPUPerIndexer = 1;
         let ingestPipeLineCPU = 0;
-        if (sv.version == "7.0" && parallelTuning.enabled) {
+        if (sv.version === "7.0" && parallelTuning.enabled) {
             ingestPipeLineCPU = 1;
         }
         let searchCPUPerIndexer = totalSearchCPUInIndexer / currentIndexers;
@@ -251,19 +251,19 @@ function calculate(inputs) {
 
     // calculate required memory in each indexer
     let memoryPerIdx = Math.ceil(minIndexers * (activeDMs * sv.memoryPerDMA + sv.memoryPerCorSearch * correlationSearches / 4 + concurrentUsers * sv.adhocSearchPerUser * sv.adhocSearchConcurrency * sv.memoryPerAdhocSearch) / (1 - marginOfError) / currentIndexers / 4) * 4;
-    if (memoryPerIdx < 16) {
+    if (memoryPerIdx < 16 || isNaN(memoryPerIdx)) {
         memoryPerIdx = 16;
     }
 
     // calculate required memory in each search head
     let memoryPerSH = Math.ceil((0.5 * totalVolume / 1000 * activeDMs + (0.00005 * totalVolume + 0.5) * correlationSearches / 4 + concurrentUsers * sv.adhocSearchPerUser * sv.adhocSearchConcurrency * sv.memoryPerAdhocSearch) / (1 - marginOfError) / currentSH / 4) * 4;
-    if (memoryPerSH < 16) {
+    if (memoryPerSH < 16 || isNaN(memoryPerSH)) {
         memoryPerSH = 16;
     }
 
     let tuningConfiguration = null;
-    if (sv.version == "7.0" && parallelTuning.enabled) {
-        tuningConfiguration = new Object();
+    if (sv.version === "7.0" && parallelTuning.enabled) {
+        tuningConfiguration = {};
         tuningConfiguration.max_concurrent = {
             network_traffic: ntParalleliation,
             web: webParalleliation,
@@ -307,14 +307,13 @@ function calculate(inputs) {
 }
 
 
-export function esCalculate(data, sv) {
+export function esCalculate(data) {
     const inputs = {};
     inputs.eVolume = {
         networkTrafficVolume: data.networkTrafficTotal,
         webVolume: data.webTotal,
         authenticationVolume: data.authenticationTotal,
     };
-    inputs.sv = sv;
     inputs.targetIdxCPU = data.indexerCores;
     inputs.targetSHCPU = data.searchHeadCores;
     inputs.correlationSearches = data.correlationSearches;
@@ -323,8 +322,8 @@ export function esCalculate(data, sv) {
 
     var esSizingResult = null;
 
-    if (inputs.sv == sv70) {
-
+    if (data.splunkVersion === '7.0') {
+        inputs.sv = sv70;
         inputs.parallelTuning = {
             enabled: data.parallelEnableChecked,
             autoTuning: data.autoTuningChecked,
@@ -332,33 +331,33 @@ export function esCalculate(data, sv) {
             webParalleliation: data.webConcurrency,
             authenticationParalleliation: data.authenticationConcurrency,
         };
-        if (inputs.parallelTuning.enabled == true && inputs.parallelTuning.autoTuning == true) {
+        if (inputs.parallelTuning.enabled === true && inputs.parallelTuning.autoTuning === true) {
             console.log("start to do auto tuning.");
             ntParallelTuningList = [3, 5, 10, 20];
             authParallelTuningList = [3, 5, 10, 20];
             webParallelTuningList = [3, 5, 10, 20];
-            for (var i = 0; i < ntParallelTuningList.length; i++) {
+            for (let i = 0; i < ntParallelTuningList.length; i++) {
                 inputs.parallelTuning.networkTrafficParalleliation = ntParallelTuningList[i];
-                for (var j = 0; j < authParallelTuningList.length; j++) {
+                for (let j = 0; j < authParallelTuningList.length; j++) {
                     inputs.parallelTuning.authenticationParalleliation = authParallelTuningList[j];
-                    for (var k = 0; k < webParallelTuningList.length; k++) {
+                    for (let k = 0; k < webParallelTuningList.length; k++) {
                         inputs.parallelTuning.webParalleliation = webParallelTuningList[k];
                         if (ntParallelTuningList[i] + authParallelTuningList[j] + webParallelTuningList[k] + 2 <= inputs.targetIdxCPU) {
                             console.log("try parallel: " + ntParallelTuningList[i] + " " + authParallelTuningList[j] + " " + webParallelTuningList[k]);
-                            var tempSizingResult = calculate(inputs);
-                            if (esSizingResult == null) {
+                            let tempSizingResult = calculate(inputs);
+                            if (esSizingResult) {
                                 esSizingResult = tempSizingResult;
                             } else {
                                 if ((tempSizingResult.idxNum + tempSizingResult.shNum) < (esSizingResult.idxNum + esSizingResult.shNum)) {
                                     console.log("find better solution" + esSizingResult);
                                     esSizingResult = tempSizingResult;
-                                } else if ((tempSizingResult.idxNum + tempSizingResult.shNum) == (esSizingResult.idxNum + esSizingResult.shNum) && (tempSizingResult.ntParalleliation + tempSizingResult.webParalleliation + tempSizingResult.authParalleliation) < (esSizingResult.ntParalleliation + esSizingResult.webParalleliation + esSizingResult.authParalleliation)) {
+                                } else if ((tempSizingResult.idxNum + tempSizingResult.shNum) === (esSizingResult.idxNum + esSizingResult.shNum) && (tempSizingResult.ntParalleliation + tempSizingResult.webParalleliation + tempSizingResult.authParalleliation) < (esSizingResult.ntParalleliation + esSizingResult.webParalleliation + esSizingResult.authParalleliation)) {
                                     console.log("find better solution" + esSizingResult);
                                     esSizingResult = tempSizingResult;
                                 }
                             }
                         } else {
-                            console.log("" + ntParallelTuningList[i] + " " + authParallelTuningList[j] + " " + webParallelTuningList[k] + " can't apply because indexer CPU core is too small!");
+                            console.log(ntParallelTuningList[i] + " " + authParallelTuningList[j] + " " + webParallelTuningList[k] + " can't apply because indexer CPU core is too small!");
                         }
 
                     }
@@ -370,6 +369,15 @@ export function esCalculate(data, sv) {
             esSizingResult = calculate(inputs);
         }
     } else {
+        if (data.splunkVersion === '6.6') {
+            inputs.sv = sv66;
+        } else if (data.splunkVersion === '6.5.1612') {
+            inputs.sv = sv651;
+        } else if (data.splunkVersion === '6.5') {
+            inputs.sv = sv65;
+        } else if (data.splunkVersion === '6.4') {
+            inputs.sv = sv64;
+        }
         esSizingResult = calculate(inputs);
     }
     return esSizingResult;
