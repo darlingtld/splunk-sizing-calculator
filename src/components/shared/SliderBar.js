@@ -7,13 +7,16 @@ export default class SliderBar extends Component {
     constructor(args) {
         super(args);
         this.state = {
-            value: 3,
-            sliderValue: 30,
-            min: 30,
-            max: 200,
+            value: this.props.data[this.props.domain] ? this.props.data[this.props.domain].value : 3,
+            sliderValue: this.props.data[this.props.domain] ? this.props.data[this.props.domain].sliderValue : 30,
+            min: this.props.data[this.props.domain] ? this.props.data[this.props.domain].min : 30,
+            max: this.props.data[this.props.domain] ? this.props.data[this.props.domain].max : 200,
             sliderColor: ['low', 'medium', 'normal', 'high']
         }
+    }
 
+    componentDidUpdate() {
+        this.props.data[this.props.domain] = this.state;
     }
 
     handleChange = (value) => {

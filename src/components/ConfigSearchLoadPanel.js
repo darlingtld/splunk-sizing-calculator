@@ -10,14 +10,14 @@ export default class ConfigSearchLoadPanel extends Component {
     constructor(args) {
         super(args);
         this.state = {
-            correlationSearches: 20,
-            concurrentUsers: 6
+            correlationSearches: this.props.data.correlationSearches ? this.props.data.correlationSearches : 20,
+            concurrentUsers: this.props.data.concurrentUsers ? this.props.data.concurrentUsers : 6
         };
         assign(this.props.data, this.state);
 
     }
 
-    componentDidUpdate(){
+    componentDidUpdate() {
         assign(this.props.data, this.state);
         console.log(this.props.data);
     }

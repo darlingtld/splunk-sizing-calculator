@@ -79,15 +79,15 @@ export default class ConfigServerPanel extends Component {
         };
 
         this.state = {
-            hardware: this.hardwareOptions[0].value,
-            searchHeadCores: 12,
-            indexerCores: 12,
-            marginOfError: 20
+            hardware: this.props.data.hardware ? this.props.data.hardware : this.hardwareOptions[0].value,
+            searchHeadCores: this.props.data.searchHeadCores ? this.props.data.searchHeadCores : 12,
+            indexerCores: this.props.data.indexerCores ? this.props.data.indexerCores : 12,
+            marginOfError: this.props.data.marginOfError ? this.props.data.marginOfError : 20
         };
         assign(this.props.data, this.state);
     }
 
-    componentDidUpdate(){
+    componentDidUpdate() {
         assign(this.props.data, this.state);
         console.log(this.props.data);
     }

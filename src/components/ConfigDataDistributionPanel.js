@@ -9,105 +9,110 @@ export default class ConfigDataDistributionPanel extends Component {
         super(args);
         this.state = {
             checked: false,
-            networkTraffic: [
-                {
-                    text: 'juniper*',
-                    value: 'juniper*',
-                    data: 0
-                },
-                {
-                    text: 'cisco*',
-                    value: 'cisco*',
-                    data: 0
-                },
-                {
-                    text: 'mcafee*',
-                    value: 'mcafee*',
-                    data: 0
-                },
-                {
-                    text: 'symantec*',
-                    value: 'symantec*',
-                    data: 0
-                },
-                {
-                    text: 'websense*',
-                    value: 'websense*',
-                    data: 0
-                },
-                {
-                    text: 'bluecoat*',
-                    value: 'bluecoat*',
-                    data: 0
-                },
-                {
-                    text: '*network',
-                    value: '*network',
-                    data: 0
-                },
-                {
-                    text: 'syslog',
-                    value: 'syslog',
-                    data: 0
-                },
-                {
-                    text: 'stash',
-                    value: 'stash',
-                    data: 0
-                }
-            ],
-            authentication: [
-                {
-                    text: '*security',
-                    value: '*security',
-                    data: 0
-                },
-                {
-                    text: 'cisco*',
-                    value: 'cisco*',
-                    data: 0
-                },
-                {
-                    text: 'ps',
-                    value: 'ps',
-                    data: 0
-                },
-                {
-                    text: 'stash',
-                    value: 'stash',
-                    data: 0
-                },
-                {
-                    text: 'juniper:sslvpn',
-                    value: 'juniper:sslvpn',
-                    data: 0
-                },
-                {
-                    text: 'ossec',
-                    value: 'ossec',
-                    data: 0
-                }
-            ],
-            web: [
-                {
-                    text: 'bluecoat*',
-                    value: 'bluecoat*',
-                    data: 0
-                },
-                {
-                    text: 'websense*',
-                    value: 'websense*',
-                    data: 0
-                }
-            ],
-            networkTrafficTotal: 0,
-            authenticationTotal: 0,
-            webTotal: 0
+            networkTraffic: this.props.data.networkTraffic ?
+                this.props.data.networkTraffic :
+                [
+                    {
+                        text: 'juniper*',
+                        value: 'juniper*',
+                        data: 0
+                    },
+                    {
+                        text: 'cisco*',
+                        value: 'cisco*',
+                        data: 0
+                    },
+                    {
+                        text: 'mcafee*',
+                        value: 'mcafee*',
+                        data: 0
+                    },
+                    {
+                        text: 'symantec*',
+                        value: 'symantec*',
+                        data: 0
+                    },
+                    {
+                        text: 'websense*',
+                        value: 'websense*',
+                        data: 0
+                    },
+                    {
+                        text: 'bluecoat*',
+                        value: 'bluecoat*',
+                        data: 0
+                    },
+                    {
+                        text: '*network',
+                        value: '*network',
+                        data: 0
+                    },
+                    {
+                        text: 'syslog',
+                        value: 'syslog',
+                        data: 0
+                    },
+                    {
+                        text: 'stash',
+                        value: 'stash',
+                        data: 0
+                    }
+                ],
+            authentication: this.props.data.authentication ?
+                this.props.data.authentication :
+                [
+                    {
+                        text: '*security',
+                        value: '*security',
+                        data: 0
+                    },
+                    {
+                        text: 'cisco*',
+                        value: 'cisco*',
+                        data: 0
+                    },
+                    {
+                        text: 'ps',
+                        value: 'ps',
+                        data: 0
+                    },
+                    {
+                        text: 'stash',
+                        value: 'stash',
+                        data: 0
+                    },
+                    {
+                        text: 'juniper:sslvpn',
+                        value: 'juniper:sslvpn',
+                        data: 0
+                    },
+                    {
+                        text: 'ossec',
+                        value: 'ossec',
+                        data: 0
+                    }
+                ],
+            web: this.props.data.web ? this.props.data.web :
+                [
+                    {
+                        text: 'bluecoat*',
+                        value: 'bluecoat*',
+                        data: 0
+                    },
+                    {
+                        text: 'websense*',
+                        value: 'websense*',
+                        data: 0
+                    }
+                ],
+            networkTrafficTotal: this.props.data.networkTrafficTotal ? this.props.data.networkTrafficTotal : 0,
+            authenticationTotal: this.props.data.authenticationTotal ? this.props.data.authenticationTotal : 0,
+            webTotal: this.props.data.webTotal ? this.props.data.webTotal : 0
         };
         assign(this.props.data, this.state);
     }
 
-    componentDidUpdate(){
+    componentDidUpdate() {
         assign(this.props.data, this.state);
         console.log(this.props.data);
     }

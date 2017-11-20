@@ -55,13 +55,13 @@ export default class ConfigVersionPanel extends Component {
             }
         ];
         this.state = {
-            splunkVersion: '7.0',
-            esVersion: '4.7.2'
+            splunkVersion: this.props.data.splunkVersion ? this.props.data.splunkVersion : this.splunkVersions[0].value,
+            esVersion: this.props.data.esVersion ? this.props.data.esVersion : this.esVersions[0].value
         };
         assign(this.props.data, this.state);
     }
 
-    componentDidUpdate(){
+    componentDidUpdate() {
         assign(this.props.data, this.state);
         console.log(this.props.data);
     }

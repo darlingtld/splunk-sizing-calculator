@@ -8,22 +8,22 @@ export default class ConfigParallelTuningPanel extends Component {
     constructor(args) {
         super(args);
         this.state = {
-            enableChecked: false,
-            autoTuningChecked: false,
-            networkTrafficConcurrency: 3,
-            authenticationConcurrency: 3,
-            webConcurrency: 3
-        }
+            parallelEnableChecked: this.props.data.parallelEnableChecked ? this.props.data.parallelEnableChecked : false,
+            autoTuningChecked: this.props.data.autoTuningChecked ? this.props.data.autoTuningChecked : false,
+            networkTrafficConcurrency: this.props.data.networkTrafficConcurrency ? this.props.data.networkTrafficConcurrency : 3,
+            authenticationConcurrency: this.props.data.authenticationConcurrency ? this.props.data.authenticationConcurrency : 3,
+            webConcurrency: this.props.data.webConcurrency ? this.props.data.webConcurrency : 3
+        };
         assign(this.props.data, this.state);
 
     }
 
-    componentDidUpdate(){
+    componentDidUpdate() {
         assign(this.props.data, this.state);
         console.log(this.props.data);
     }
 
-    toggleEnable = () => this.setState({enableChecked: !this.state.enableChecked});
+    toggleEnable = () => this.setState({parallelEnableChecked: !this.state.parallelEnableChecked});
 
     toggleAutoTuning = () => this.setState({autoTuningChecked: !this.state.autoTuningChecked});
 
@@ -49,7 +49,7 @@ export default class ConfigParallelTuningPanel extends Component {
                             <Item.Content>
                                 <Radio slider label='Enable'
                                        onChange={this.toggleEnable}
-                                       checked={this.state.enableChecked}/>
+                                       checked={this.state.parallelEnableChecked}/>
                                 <Radio slider label='Auto Tuning'
                                        style={{float: 'right'}}
                                        onChange={this.toggleAutoTuning}
@@ -57,7 +57,7 @@ export default class ConfigParallelTuningPanel extends Component {
                             </Item.Content>
                         </Item>
                     </Item.Group>
-                    {this.state.enableChecked && !this.state.autoTuningChecked ?
+                    {this.state.parallelEnableChecked && !this.state.autoTuningChecked ?
                         <Item.Group relaxed={true}>
                             <Divider horizontal section={true}>Parallel Settings</Divider>
                             <Item>
@@ -75,7 +75,7 @@ export default class ConfigParallelTuningPanel extends Component {
                                         Select max Network Traffic concurrency.
                                     </Item.Meta>
                                     <Item.Description>
-                                        <SliderBar onChange={this.onChangeNetworkTrafficConcurrency}/>
+                                        <SliderBar onChange={this.onChangeNetworkTrafficConcurrency} data={this.props.data} domain='networkTrafficSlider'/>
                                     </Item.Description>
                                 </Item.Content>
                             </Item>
@@ -92,7 +92,7 @@ export default class ConfigParallelTuningPanel extends Component {
                                         Select max Authentication concurrency.
                                     </Item.Meta>
                                     <Item.Description>
-                                        <SliderBar onChange={this.onChangeAuthenticationConcurrency}/>
+                                        <SliderBar onChange={this.onChangeAuthenticationConcurrency} data={this.props.data} domain='authenticationSlider'/>
                                     </Item.Description>
                                 </Item.Content>
                             </Item>
@@ -109,7 +109,7 @@ export default class ConfigParallelTuningPanel extends Component {
                                         Select max Web concurrency.
                                     </Item.Meta>
                                     <Item.Description>
-                                        <SliderBar onChange={this.onChangeWebConcurrency}/>
+                                        <SliderBar onChange={this.onChangeWebConcurrency} data={this.props.data} domain='webSlider'/>
                                     </Item.Description>
                                 </Item.Content>
                             </Item>

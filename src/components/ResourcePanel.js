@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Statistic, Grid, Button, Icon} from 'semantic-ui-react';
 import './ResourcePanel.scss';
 import ConfigVizPanel from "./ConfigVizPanel";
+import {esCalculate} from "../calculation/esCalculator";
 
 export default class ResourcePanel extends Component {
     constructor(args) {
@@ -9,7 +10,8 @@ export default class ResourcePanel extends Component {
     }
 
     doCalculate=()=>{
-
+        const result = esCalculate(this.props.data);
+        console.log(result);
     };
 
     render() {
