@@ -1,5 +1,6 @@
-const webpack = require('webpack')
-const path = require('path')
+const webpack = require('webpack');
+const path = require('path');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     devtool: 'source-map',
@@ -14,6 +15,14 @@ module.exports = {
         path: path.resolve(__dirname, './dist'),
         filename: '[name].js'
     },
+    plugins: [
+        new CopyWebpackPlugin([
+            {
+                from: path.join(__dirname, 'index.html'),
+                to: path.join(__dirname, 'dist'),
+            },
+        ])
+    ],
     module: {
         rules: [
             {test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader'},
