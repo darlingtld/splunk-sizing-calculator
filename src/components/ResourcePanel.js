@@ -84,7 +84,7 @@ export default class ResourcePanel extends Component {
                         </Grid.Column>
                     </Grid.Row>
                     <Grid.Row>
-                        <Grid.Column width={16}>
+                        <Grid.Column width={15}>
                             <ConfigVizPanel/>
                         </Grid.Column>
                     </Grid.Row>

@@ -20,8 +20,13 @@ export default class Gauge extends Component {
     }
 
     render() {
-        return <svg id={this.props.name}
-                    ref={node => this.node = node}
-                    width={50} height={50}/>
+        return (
+            <div>
+                <svg id={this.props.name}
+                     ref={node => this.node = node}
+                     width={50} height={50}/>
+                <div>{this.props.name}</div>
+            </div>
+        )
     }
 }
