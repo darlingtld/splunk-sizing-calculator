@@ -81,7 +81,7 @@ export default class ConfigPanel extends Component {
                                             {item.name}
                                         </Menu.Item>;
                                     } else {
-                                        return <Menu.Item>
+                                        return <Menu.Item key={item.name}>
                                             <Icon name={item.icon}/>
                                             {item.name}
                                             <Menu.Menu>

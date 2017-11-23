@@ -1,15 +1,17 @@
 import React, {Component} from 'react';
-import {Image} from 'semantic-ui-react';
-import img from '../assets/placeholder.png';
+import Gauge from "./visualization/Gauge";
 
-export default class ConfigVizPanel extends Component{
-    constructor(args){
+export default class ConfigVizPanel extends Component {
+    constructor(args) {
         super(args);
     }
 
-    render(){
+    render() {
         return (
-            <Image src={img}/>
+            <div>
+                <Gauge name="cpu" value={50}/>
+                <Gauge name="memory" value={56}/>
+            </div>
         )
     }
 }

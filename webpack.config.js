@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const d3 = require("d3");
 
 module.exports = {
     devtool: 'source-map',
@@ -23,6 +24,11 @@ module.exports = {
             },
         ])
     ],
+    resolve: {
+        alias: {
+            d3: 'd3/build/d3.js'
+        }
+    },
     module: {
         rules: [
             {test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader'},
