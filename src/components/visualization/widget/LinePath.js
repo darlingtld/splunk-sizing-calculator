@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 
-export function createLine(name, width, height, isReverse, color, duration) {
+export function createLine(name, width, height, isReverse, color, duration, rotate) {
     var w = width;
     var h = height;
 
@@ -26,7 +26,7 @@ export function createLine(name, width, height, isReverse, color, duration) {
 // data is created inside the function so it is always unique
     let repeat = () => {
 
-        var data = d3.range(11).map(function () {
+        var data = d3.range(11).map(function (i) {
             return 0;
         })
 

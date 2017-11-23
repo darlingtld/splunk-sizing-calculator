@@ -13,7 +13,7 @@ export default class ConfigVizPanel extends Component {
             {
                 menuItem: <Menu.Item key='topology'>Topology<Image src={topology} width={22}
                                                                    style={{marginLeft: '5px'}}/></Menu.Item>,
-                render: () => <Tab.Pane><TopologyPane/></Tab.Pane>,
+                render: () => <Tab.Pane><TopologyPane searchHeads={17} indexers={35}/></Tab.Pane>,
             },
             {
                 menuItem: <Menu.Item key='detail'>Details<Image src={cpu} width={22}
