@@ -19,10 +19,10 @@ export default class DetailPane extends Component {
                             <span>Search Head</span>
                         </Grid.Column>
                         <Grid.Column>
-                            <Gauge id='shCpu' name="cpu" value={50}/>
+                            <Gauge id='shCpu' name="cpu" value={20}/>
                         </Grid.Column>
                         <Grid.Column>
-                            <Gauge id='shMem' name="memory" value={56}/>
+                            <Gauge id='shMem' name="memory" value={82}/>
                         </Grid.Column>
                     </Grid.Row>
                     <Grid.Row>
@@ -34,7 +34,7 @@ export default class DetailPane extends Component {
                             <Gauge id='idxCpu' name="cpu" value={50}/>
                         </Grid.Column>
                         <Grid.Column>
-                            <Gauge id='idxMem' name="memory" value={56}/>
+                            <Gauge id='idxMem' name="memory" value={70}/>
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>
