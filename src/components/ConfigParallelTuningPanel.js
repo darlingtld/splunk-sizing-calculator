@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-import {Segment, Statistic, Item, Transition, Radio, Divider} from 'semantic-ui-react';
+import {Segment, Statistic, Item, Transition, Radio, Divider, Button, Modal} from 'semantic-ui-react';
 import SliderBar from "./shared/SliderBar";
 import {getRandomTransitionAnimation} from "./shared/Utils";
 import {assign} from 'lodash';
+import ConfigParallelTuningConfPanel from "./ConfigParallelTuningConfPanel";
 
 export default class ConfigParallelTuningPanel extends Component {
     constructor(args) {
@@ -129,6 +130,18 @@ export default class ConfigParallelTuningPanel extends Component {
                                         <SliderBar onChange={this.onChangeWebConcurrency} data={this.props.data}
                                                    domain='webSlider'/>
                                     </Item.Description>
+                                </Item.Content>
+                            </Item>
+                            <Item>
+                                <Item.Content>
+                                    <Modal trigger={<Button floated='right' color='green'>View .conf files</Button>}>
+                                        <Modal.Header>Splunk .conf files</Modal.Header>
+                                        <Modal.Content>
+                                            <Modal.Description>
+                                                <ConfigParallelTuningConfPanel data={this.props.data}/>
+                                            </Modal.Description>
+                                        </Modal.Content>
+                                    </Modal>
                                 </Item.Content>
                             </Item>
                         </Item.Group> : null}

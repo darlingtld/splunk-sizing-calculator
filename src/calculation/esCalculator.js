@@ -320,7 +320,7 @@ export function esCalculate(data) {
     inputs.concurrentUsers = data.concurrentUsers;
     inputs.marginOfError = data.marginOfError;
 
-    var esSizingResult = null;
+    var esSizingResult;
 
     if (data.splunkVersion === '7.0') {
         inputs.sv = sv70;
@@ -333,9 +333,9 @@ export function esCalculate(data) {
         };
         if (inputs.parallelTuning.enabled === true && inputs.parallelTuning.autoTuning === true) {
             console.log("start to do auto tuning.");
-            ntParallelTuningList = [3, 5, 10, 20];
-            authParallelTuningList = [3, 5, 10, 20];
-            webParallelTuningList = [3, 5, 10, 20];
+            var ntParallelTuningList = [3, 5, 10, 20];
+            var authParallelTuningList = [3, 5, 10, 20];
+            var webParallelTuningList = [3, 5, 10, 20];
             for (let i = 0; i < ntParallelTuningList.length; i++) {
                 inputs.parallelTuning.networkTrafficParalleliation = ntParallelTuningList[i];
                 for (let j = 0; j < authParallelTuningList.length; j++) {
@@ -345,7 +345,7 @@ export function esCalculate(data) {
                         if (ntParallelTuningList[i] + authParallelTuningList[j] + webParallelTuningList[k] + 2 <= inputs.targetIdxCPU) {
                             console.log("try parallel: " + ntParallelTuningList[i] + " " + authParallelTuningList[j] + " " + webParallelTuningList[k]);
                             let tempSizingResult = calculate(inputs);
-                            if (esSizingResult) {
+                            if (!esSizingResult) {
                                 esSizingResult = tempSizingResult;
                             } else {
                                 if ((tempSizingResult.idxNum + tempSizingResult.shNum) < (esSizingResult.idxNum + esSizingResult.shNum)) {

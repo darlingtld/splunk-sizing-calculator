@@ -3,7 +3,7 @@ import {Statistic, Grid, Button, Icon} from 'semantic-ui-react';
 import './ResourcePanel.scss';
 import ConfigVizPanel from "./ConfigVizPanel";
 import {esCalculate} from "../calculation/esCalculator";
-
+import {assign} from 'lodash';
 export default class ResourcePanel extends Component {
     constructor(args) {
         super(args);
@@ -28,6 +28,7 @@ export default class ResourcePanel extends Component {
             idxMemory: result.idxMemory
         });
         console.log(result);
+        assign(this.props.data, {result})
     };
 
     render() {

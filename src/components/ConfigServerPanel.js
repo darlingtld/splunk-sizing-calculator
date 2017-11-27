@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Segment, Dropdown, Item, Popup, Icon, Transition, Button} from 'semantic-ui-react';
+import {Segment, Dropdown, Item, Popup, Icon, Transition, Label} from 'semantic-ui-react';
 import PlusMinusInput from "./shared/PlusMinusInput";
 import {isPositiveNumber, getRandomTransitionAnimation} from "./shared/Utils";
 import {assign} from 'lodash';
@@ -203,7 +203,9 @@ export default class ConfigServerPanel extends Component {
                                                         value={this.state.searchHeadCores}
                                                         onChange={this.onChangeSearchHeadCores}
                                                         onChangeInput={this.onChangeSearchHeadCoresInput}
+                                                        style={{float: 'left'}}
                                         />
+                                        {this.renderRangeString(this.state.searchHeadCores)}
                                     </Item.Description>
                                 </Item.Content>
                             </Item>
@@ -229,6 +231,7 @@ export default class ConfigServerPanel extends Component {
                                                         onChange={this.onChangeIndexerCores}
                                                         onChangeInput={this.onChangeIndexerCoresInput}
                                         />
+                                        {this.renderRangeString(this.state.indexerCores)}
                                     </Item.Description>
                                 </Item.Content>
                             </Item>
@@ -260,6 +263,19 @@ export default class ConfigServerPanel extends Component {
                     </Item.Group>
                 </Segment>
             </Transition>
+        )
+    }
+
+    renderRangeString(cores) {
+        const upper = Math.floor((100 + this.state.marginOfError) * cores/100);
+        const lower = Math.ceil((100 - this.state.marginOfError) * cores/100);
+        return (
+            <Label color='olive' image style={{float: 'right'}}>
+                Range
+                <Label.Detail>
+                    {lower} ~ {upper}
+                </Label.Detail>
+            </Label>
         )
     }
 }
