@@ -15,7 +15,7 @@ export default class Line extends Component {
     }
 
     initialize() {
-        createLine(this.props.name, this.props.width, this.props.height, this.props.isReverse, this.props.color, this.props.duration)
+        createLine(this.props.name, this.props.width, this.props.height, this.props.isReverse, this.props.color, this.props.duration, this.props.backAndForth)
     }
 
     render() {

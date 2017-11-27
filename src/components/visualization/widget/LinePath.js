@@ -1,6 +1,7 @@
 import * as d3 from 'd3';
 
-export function createLine(name, width, height, isReverse, color, duration, rotate) {
+export function createLine(name, width, height, isReverse, color, duration, backAndForth) {
+    var count = 0;
     var w = width;
     var h = height;
 
@@ -16,7 +17,11 @@ export function createLine(name, width, height, isReverse, color, duration, rota
 
     var line = d3.line()
         .x(function (d, i) {
-            return isReverse ? w - x(i) : x(i);
+            if (backAndForth) {
+                return count % 2 === 0 ? w - x(i) : x(i);
+            } else {
+                return isReverse ? w - x(i) : x(i);
+            }
         })
         .y(function (d) {
             return y(d);
@@ -25,6 +30,7 @@ export function createLine(name, width, height, isReverse, color, duration, rota
 
 // data is created inside the function so it is always unique
     let repeat = () => {
+        count++;
 
         var data = d3.range(11).map(function (i) {
             return 0;
