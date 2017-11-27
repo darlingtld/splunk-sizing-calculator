@@ -16,16 +16,16 @@ export default class Gauge extends Component {
     }
 
     createGauge() {
-        loadLiquidFillGauge(this.props.name, this.props.value);
+        loadLiquidFillGauge(this.props.id, this.props.value);
     }
 
     render() {
         return (
             <div>
-                <svg id={this.props.name}
+                <svg id={this.props.id}
                      ref={node => this.node = node}
                      width={50} height={50}/>
-                <div>{this.props.name}</div>
+                <div style={{width: '50px', textAlign:'center'}}><span>{this.props.name}</span></div>
             </div>
         )
     }

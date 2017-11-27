@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Image, Grid, Statistic} from 'semantic-ui-react';
-import {times, min} from 'lodash';
+import {times, min, uniqueId} from 'lodash';
 import sh from '../../assets/sh.png';
 import idx from '../../assets/idx.png';
 import others from '../../assets/others.svg';
@@ -18,27 +18,27 @@ export default class TopologyPane extends Component {
         const max = type === 'searchHead' ? 2 : 3;
         if (type === 'searchHead') {
             if (this.props.searchHeads === 1) {
-                times(2, () => array.push(<Grid.Column/>));
+                times(2, () => array.push(<Grid.Column key={uniqueId()}/>));
             }else if (this.props.searchHeads >= 2) {
-                times(1, () => array.push(<Grid.Column/>));
+                times(1, () => array.push(<Grid.Column key={uniqueId()}/>));
             }
         } else {
             if (this.props.indexers === 1) {
-                times(2, () => array.push(<Grid.Column/>));
+                times(2, () => array.push(<Grid.Column key={uniqueId()}/>));
             } else if (this.props.indexers === 2) {
-                times(1, () => array.push(<Grid.Column/>));
+                times(1, () => array.push(<Grid.Column key={uniqueId()}/>));
             }
         }
 
 
         const count = min([amount, max]);
         for (let i = 0; i < count; i++) {
-            array.push(<Grid.Column>
+            array.push(<Grid.Column key={uniqueId()}>
                 <Image src={pic} style={{margin: 'auto'}}/>
             </Grid.Column>);
             if (i < count - 1) {
                 array.push(
-                    <Grid.Column textAlign='center' style={{padding: 0}}>
+                    <Grid.Column textAlign='center' style={{padding: 0}} key={uniqueId()}>
                         <Image src={idxLine} style={{margin: 'auto', width: '46px'}}/>
                     </Grid.Column>
                 )
@@ -55,10 +55,10 @@ export default class TopologyPane extends Component {
             return (
                 <Grid columns={2}>
                     <Grid.Row>
-                        <Grid.Column>
+                        <Grid.Column key={uniqueId()}>
                             {this.renderMore(pic, amount - max, false)}
                         </Grid.Column>
-                        <Grid.Column>
+                        <Grid.Column key={uniqueId()}>
                             {this.renderMore(pic, amount - max - 3, true)}
                         </Grid.Column>
                     </Grid.Row>
@@ -89,26 +89,26 @@ export default class TopologyPane extends Component {
             return;
         }
         const lineArray = [];
-        lineArray.push(<Grid.Column/>);
-        lineArray.push(<Grid.Column/>);
-        lineArray.push(<Grid.Column/>);
-        if (this.props.searchHeads >= 2) {
+        lineArray.push(<Grid.Column key={uniqueId()}/>);
+        lineArray.push(<Grid.Column key={uniqueId()}/>);
+        lineArray.push(<Grid.Column key={uniqueId()}/>);
+        if (this.props.searchHeads  >= 2) {
             lineArray.push(
-                <Grid.Column>
+                <Grid.Column key={uniqueId()}>
                     <Image src={crossLine} style={{margin: 'auto'}}/>
                 </Grid.Column>
             );
 
-            lineArray.push(<Grid.Column/>);
+            lineArray.push(<Grid.Column key={uniqueId()}/>);
             lineArray.push(
-                <Grid.Column>
+                <Grid.Column key={uniqueId()}>
                     <Image src={crossLine} style={{margin: 'auto'}}/>
                 </Grid.Column>
             );
         } else if (this.props.searchHeads === 1) {
-            lineArray.push(<Grid.Column/>);
+            lineArray.push(<Grid.Column key={uniqueId()}/>);
             lineArray.push(
-                <Grid.Column>
+                <Grid.Column key={uniqueId()}>
                     <Image src={crossLine} style={{margin: 'auto'}}/>
                 </Grid.Column>
             );
@@ -123,7 +123,7 @@ export default class TopologyPane extends Component {
             paddingLeft: '35px'
         };
         return (
-            <Grid.Column style={type === 'searchHead' ? null : style}>
+            <Grid.Column style={type === 'searchHead' ? null : style} key={uniqueId()}>
                 <Statistic.Group size='mini'>
                     <Statistic>
                         <Statistic.Value>{amount}</Statistic.Value>
@@ -147,7 +147,7 @@ export default class TopologyPane extends Component {
                         {this.renderStatistics('searchHead')}
                         <Grid.Column/>
                         {this.renderInstances(sh, 'searchHead')}
-                        <Grid.Column width={2}>
+                        <Grid.Column width={2} key={uniqueId()}>
                             {this.renderOthers(sh, 'searchHead')}
                         </Grid.Column>
                     </Grid.Row>
@@ -158,7 +158,7 @@ export default class TopologyPane extends Component {
                         {this.renderStatistics('indexer')}
                         <Grid.Column/>
                         {this.renderInstances(idx, 'indexer')}
-                        <Grid.Column width={2}>
+                        <Grid.Column width={2} key={uniqueId()}>
                             {this.renderOthers(idx, 'indexer')}
                         </Grid.Column>
                     </Grid.Row>
