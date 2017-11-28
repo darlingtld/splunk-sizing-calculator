@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
-import {Statistic, Grid, Button, Icon} from 'semantic-ui-react';
+import {Statistic, Grid, Button, Icon, Modal, Header, Table} from 'semantic-ui-react';
 import './ResourcePanel.scss';
 import ConfigVizPanel from "./ConfigVizPanel";
 import {esCalculate} from "../calculation/esCalculator";
 import {assign} from 'lodash';
+
 export default class ResourcePanel extends Component {
     constructor(args) {
         super(args);
@@ -29,6 +30,98 @@ export default class ResourcePanel extends Component {
         });
         console.log(result);
         assign(this.props.data, {result})
+    };
+
+    renderParameters = () => {
+        const {data} = this.props;
+        const concurrency = [];
+        if (data.parallelEnableChecked) {
+            concurrency.push(<Table.Row>
+                <Table.Cell>
+                    Network Traffic Concurrency
+                </Table.Cell>
+                <Table.Cell textAlign='center'>{data.networkTrafficConcurrency}</Table.Cell>
+            </Table.Row>);
+            concurrency.push(
+                <Table.Row>
+                    <Table.Cell>
+                        Authentication Concurrency
+                    </Table.Cell>
+                    <Table.Cell textAlign='center'>{data.authenticationConcurrency}</Table.Cell>
+                </Table.Row>);
+            concurrency.push(
+                <Table.Row>
+                    <Table.Cell>
+                        Web Concurrency
+                    </Table.Cell>
+                    <Table.Cell textAlign='center'>{data.webConcurrency}</Table.Cell>
+                </Table.Row>);
+        }
+        return <Table celled striped columns={2}>
+            <Table.Body>
+                <Table.Row>
+                    <Table.Cell>
+                        Search Head
+                    </Table.Cell>
+                    <Table.Cell textAlign='center'>{data.searchHeadCores}</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                    <Table.Cell>
+                        Indexer
+                    </Table.Cell>
+                    <Table.Cell textAlign='center'>{data.indexerCores}</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                    <Table.Cell>
+                        Margin of Error%
+                    </Table.Cell>
+                    <Table.Cell textAlign='center'>{data.marginOfError}</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                    <Table.Cell>
+                        Splunk Enterprise Version
+                    </Table.Cell>
+                    <Table.Cell textAlign='center'>{data.splunkVersion}</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                    <Table.Cell>
+                        Enterprise Security Version
+                    </Table.Cell>
+                    <Table.Cell textAlign='center'>{data.esVersion}</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                    <Table.Cell>
+                        Enabled Correlation Searches
+                    </Table.Cell>
+                    <Table.Cell textAlign='center'>{data.correlationSearches}</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                    <Table.Cell>
+                        Concurrent Users
+                    </Table.Cell>
+                    <Table.Cell textAlign='center'>{data.concurrentUsers}</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                    <Table.Cell>
+                        Data Distribution Across Network Traffic Data Model
+                    </Table.Cell>
+                    <Table.Cell textAlign='center'>{data.networkTrafficTotal} GB</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                    <Table.Cell>
+                        Data Distribution Across Authentication Data Model
+                    </Table.Cell>
+                    <Table.Cell textAlign='center'>{data.authenticationTotal} GB</Table.Cell>
+                </Table.Row>
+                <Table.Row>
+                    <Table.Cell>
+                        Data Distribution Across Web Data Model
+                    </Table.Cell>
+                    <Table.Cell textAlign='center'>{data.webTotal} GB</Table.Cell>
+                </Table.Row>
+                {concurrency}
+            </Table.Body>
+        </Table>
     };
 
     render() {
@@ -73,15 +166,26 @@ export default class ResourcePanel extends Component {
                             </Statistic.Group>
                         </Grid.Column>
                         <Grid.Column width={6} verticalAlign='middle'>
-                            <Button animated='fade' size='large' color='orange' onClick={this.doCalculate}>
-                                <Button.Content visible>
-                                    <Icon name='calculator'/>
-                                    Calculate
-                                </Button.Content>
-                                <Button.Content hidden>
-                                    ES Sizing
-                                </Button.Content>
-                            </Button>
+                            <Button.Group>
+                                <Button animated='fade' size='large' color='orange' onClick={this.doCalculate}>
+                                    <Button.Content visible>
+                                        <Icon name='calculator'/>
+                                        Calculate
+                                    </Button.Content>
+                                    <Button.Content hidden>
+                                        ES Sizing
+                                    </Button.Content>
+                                </Button>
+                                {' '}
+                                <Modal trigger={<Button icon><Icon name='setting'/></Button>}>
+                                    <Modal.Header>ES Sizing Parameters</Modal.Header>
+                                    <Modal.Content image>
+                                        <Modal.Description>
+                                            {this.renderParameters()}
+                                        </Modal.Description>
+                                    </Modal.Content>
+                                </Modal>
+                            </Button.Group>
                         </Grid.Column>
                     </Grid.Row>
                     <Grid.Row>
