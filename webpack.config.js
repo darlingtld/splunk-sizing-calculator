@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const d3 = require("d3");
 
 module.exports = {
@@ -22,7 +23,12 @@ module.exports = {
                 from: path.join(__dirname, 'index.html'),
                 to: path.join(__dirname, 'dist'),
             },
-        ])
+            {
+                from: path.join(__dirname, 'src/assets/favicon.ico'),
+                to: path.join(__dirname, 'dist'),
+            }
+        ]),
+        new UglifyJSPlugin()
     ],
     resolve: {
         alias: {
