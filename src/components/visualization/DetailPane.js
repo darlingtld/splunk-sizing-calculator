@@ -1,41 +1,58 @@
 import React, {Component} from 'react';
-import Gauge from "./widget/Gauge";
-import {Grid, Image} from 'semantic-ui-react';
-import sh from '../../assets/sh.png';
-import idx from '../../assets/idx.png';
+import {Grid, Icon} from 'semantic-ui-react';
+import {times} from 'lodash';
 
 export default class DetailPane extends Component {
     constructor(args) {
         super(args);
     }
 
+    renderCoreUsage = (count, color) => {
+        const columnNum = Math.ceil(count / 2);
+        const columnArray = [];
+        const columnArrayRest = [];
+
+        times(columnNum, () => columnArray.push(
+            <Grid.Column>
+                <Icon name='microchip' color={color}/>
+            </Grid.Column>
+        ));
+        times(count - columnArray.length, () => columnArrayRest.push(
+            <Grid.Column>
+                <Icon name='microchip' color={color}/>
+            </Grid.Column>
+        ));
+        return <Grid columns={columnNum}>
+            <Grid.Row>
+                {columnArray}
+            </Grid.Row>
+            <Grid.Row>
+                {columnArrayRest}
+            </Grid.Row>
+        </Grid>
+
+    }
+
     render() {
         return (
             <div>
-                <Grid columns={10}>
-                    <Grid.Row>
-                        <Grid.Column>
-                            <Image src={sh}/>
-                            <span>Search Head</span>
-                        </Grid.Column>
-                        <Grid.Column>
-                            <Gauge id='shCpu' name="cpu" value={20}/>
-                        </Grid.Column>
-                        <Grid.Column>
-                            <Gauge id='shMem' name="memory" value={82}/>
-                        </Grid.Column>
+                <Grid textAlign='center'>
+                    <Grid.Row columns={5}>
+                        {this.renderCoreUsage(3, 'red')}
+                        {this.renderCoreUsage(5, 'blue')}
+                        {this.renderCoreUsage(4, 'yellow')}
                     </Grid.Row>
-                    <Grid.Row>
-                        <Grid.Column>
-                            <Image src={idx}/>
-                            <span>Indexer</span>
-                        </Grid.Column>
-                        <Grid.Column>
-                            <Gauge id='idxCpu' name="cpu" value={50}/>
-                        </Grid.Column>
-                        <Grid.Column>
-                            <Gauge id='idxMem' name="memory" value={70}/>
-                        </Grid.Column>
+                    <Grid.Row style={{
+                        border: '1px solid black',
+                        borderRadius: '15px',
+                        margin: '0px 20px 5px 20px'
+                    }}>
+                        <Icon color='red' name='circle'/>
+                        Cores for concurrent searches
+                        <Icon color='blue' name='circle'/>
+                        Cores for DMA acceleration
+                        <Icon color='yellow' name='circle'/>
+                        Cores for searches
                     </Grid.Row>
                 </Grid>
             </div>
