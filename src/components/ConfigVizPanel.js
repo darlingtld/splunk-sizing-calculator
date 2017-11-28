@@ -24,7 +24,10 @@ export default class ConfigVizPanel extends Component {
                                                                 style={{marginLeft: '5px'}}/></Menu.Item>,
                 render: () =>
                     <Tab.Pane>
-                        <DetailPane/>
+                        <DetailPane
+                            concurrency={this.props.data.shCPU / 3}
+                            dma={this.props.data.shCPU / 3}
+                            search={this.props.data.shCPU / 3}/>
                     </Tab.Pane>,
             },
         ]

@@ -190,7 +190,7 @@ export default class ResourcePanel extends Component {
                     </Grid.Row>
                     <Grid.Row>
                         <Grid.Column width={15}>
-                            <ConfigVizPanel searchHeads={this.state.searchHeads} indexers={this.state.indexers}/>
+                            <ConfigVizPanel searchHeads={this.state.searchHeads} indexers={this.state.indexers} data={this.state}/>
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>

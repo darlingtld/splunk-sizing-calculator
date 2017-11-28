@@ -38,9 +38,9 @@ export default class DetailPane extends Component {
             <div>
                 <Grid textAlign='center'>
                     <Grid.Row columns={5}>
-                        {this.renderCoreUsage(0, 'red')}
-                        {this.renderCoreUsage(0, 'blue')}
-                        {this.renderCoreUsage(0, 'yellow')}
+                        {this.renderCoreUsage(this.props.concurrency, 'red')}
+                        {this.renderCoreUsage(this.props.dma, 'blue')}
+                        {this.renderCoreUsage(this.props.search, 'yellow')}
                     </Grid.Row>
                     <Grid.Row style={{
                         border: '1px solid black',
