@@ -261,6 +261,26 @@ function calculate(inputs) {
         memoryPerSH = 16;
     }
 
+    // calculate actual CPU usage in indexer
+    let DMACPUCoresPerIndexer = ntVolume / currentIndexers / ntCapacity * ntParalleliation + webVolume / currentIndexers / webCapacity * webParalleliation + authVolume / currentIndexers / authCapacity * authParalleliation + 1;
+    if (sv.version === "7.0" && parallelTuning.enabled) {
+        DMACPUCoresPerIndexer = DMACPUCoresPerIndexer + 1;
+    }
+    const searchCPUCoresPerIndexer = totalSearchCPUInIndexer * (1 - marginOfError) / currentIndexers;
+    const marginCPUCoresPerIndexer = (DMACPUCoresPerIndexer + searchCPUCoresPerIndexer) * marginOfError;
+    const indexerCPUPerCore = 100 / targetIdxCPU;
+    const DMACPUUsagePerIndexer = DMACPUCoresPerIndexer * indexerCPUPerCore;
+    const searchCPUUsagePerIndexer = searchCPUCoresPerIndexer * indexerCPUPerCore;
+    const marginCPUUsagePerIndexer = marginCPUCoresPerIndexer * indexerCPUPerCore;
+
+
+    // calculate actual CPU usage in search head
+    const searchCPUCoresPerSH = correlationSearches / 4 * Math.min((totalVolume / 1000), 1) / currentSH + concurrentUsers * sv.adhocSearchPerUser * sv.adhocSearchConcurrency / currentSH + 1;
+    const marginCPUCoresPerSH = searchCPUCoresPerSH * marginOfError;
+    const shCPUPerCore = 100 / targetSHCPU;
+    const searchCPUUsagePerSH = searchCPUCoresPerSH * shCPUPerCore;
+    const marginCPUUsagePerSH = marginCPUCoresPerSH * shCPUPerCore;
+
     let tuningConfiguration = null;
     if (sv.version === "7.0" && parallelTuning.enabled) {
         tuningConfiguration = {};
@@ -284,6 +304,11 @@ function calculate(inputs) {
         shNum: currentSH,
         idxCPU: targetIdxCPU,
         shCPU: targetSHCPU,
+        searchCPUPerIndexer: searchCPUUsagePerIndexer,
+        dmaCPUPerIndexer: DMACPUUsagePerIndexer,
+        marginCPUPerIndexer: marginCPUUsagePerIndexer,
+        searchCPUPerSH: searchCPUUsagePerSH,
+        marginCPUPerSH: marginCPUUsagePerSH,
         idxMemory: memoryPerIdx,
         shMemory: memoryPerSH,
         ntParalleliation: ntParalleliation,

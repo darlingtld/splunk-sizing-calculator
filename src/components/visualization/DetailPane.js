@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Grid, Icon} from 'semantic-ui-react';
+import {Grid, Icon, Label} from 'semantic-ui-react';
 import {times} from 'lodash';
 
 export default class DetailPane extends Component {
@@ -8,7 +8,10 @@ export default class DetailPane extends Component {
     }
 
     renderCoreUsage = (count, color) => {
-        const columnNum = Math.ceil(count / 2);
+        if (isNaN(count)) {
+            return;
+        }
+        const columnNum = Math.min(Math.floor(count), 9);
         const columnArray = [];
         const columnArrayRest = [];
 
@@ -17,12 +20,13 @@ export default class DetailPane extends Component {
                 <Icon name='microchip' color={color} size='large'/>
             </Grid.Column>
         ));
-        times(count - columnArray.length, () => columnArrayRest.push(
+        times(Math.min(1, count - columnArray.length), () => columnArrayRest.push(
             <Grid.Column>
-                <Icon name='microchip' color={color} size='large'/>
+                <Icon name='ellipsis horizontal' color={color} size='large'/>
             </Grid.Column>
         ));
-        return <Grid columns={columnNum}>
+
+        return <Grid columns={columnNum + 1}>
             <Grid.Row>
                 {columnArray}
             </Grid.Row>
@@ -34,13 +38,23 @@ export default class DetailPane extends Component {
     }
 
     render() {
+        const {result} = this.props.data;
         return (
             <div>
                 <Grid textAlign='center'>
                     <Grid.Row columns={5}>
-                        {this.renderCoreUsage(this.props.concurrency, 'red')}
-                        {this.renderCoreUsage(this.props.dma, 'blue')}
-                        {this.renderCoreUsage(this.props.search, 'yellow')}
+                        {this.renderCoreUsage(result.searchCPUPerSH, 'red')}
+                        {this.renderCoreUsage(result.marginCPUPerSH, 'blue')}
+                        <Grid.Column>
+                            <Label.Group>
+                                <Label>
+                                    <Icon name='microchip' color='red'/> {Math.floor(result.searchCPUPerSH)}
+                                </Label>
+                                <Label>
+                                    <Icon name='microchip' color='blue'/> {Math.floor(result.marginCPUPerSH)}
+                                </Label>
+                            </Label.Group>
+                        </Grid.Column>
                     </Grid.Row>
                     <Grid.Row style={{
                         border: '1px solid black',
@@ -48,12 +62,42 @@ export default class DetailPane extends Component {
                         margin: '0px 20px 5px 20px'
                     }}>
                         <Icon color='red' name='circle'/>
-                        Cores for concurrent searches
+                        Search CPU Per Search Head
                         <Icon color='blue' name='circle'/>
-                        Cores for DMA acceleration
-                        <Icon color='yellow' name='circle'/>
-                        Cores for searches
+                        Margin CPU Per Search Head
                     </Grid.Row>
+                    <Grid.Row columns={5}>
+                        {this.renderCoreUsage(result.searchCPUPerIndexer, 'red')}
+                        {this.renderCoreUsage(result.marginCPUPerIndexer, 'blue')}
+                        {this.renderCoreUsage(result.dmaCPUPerIndexer, 'yellow')}
+                        {!isNaN(result.searchCPUPerIndexer) ?
+                            <Grid.Column>
+                                <Label.Group>
+                                    <Label>
+                                        <Icon name='microchip' color='red'/> {Math.floor(result.searchCPUPerIndexer)}
+                                    </Label>
+                                    <Label>
+                                        <Icon name='microchip' color='blue'/> {Math.floor(result.marginCPUPerIndexer)}
+                                    </Label>
+                                    <Label>
+                                        <Icon name='microchip' color='yellow'/> {Math.floor(result.dmaCPUPerIndexer)}
+                                    </Label>
+                                </Label.Group>
+                            </Grid.Column> : null}
+                    </Grid.Row>
+                    {!isNaN(result.searchCPUPerIndexer) ?
+                        <Grid.Row style={{
+                            border: '1px solid black',
+                            borderRadius: '15px',
+                            margin: '0px 20px 5px 20px'
+                        }}>
+                            <Icon color='red' name='circle'/>
+                            Search CPU Per Indexer
+                            <Icon color='blue' name='circle'/>
+                            Margin CPU Per Indexer
+                            <Icon color='yellow' name='circle'/>
+                            DMA CPU Per Indexer
+                        </Grid.Row> : null}
                 </Grid>
             </div>
         )
