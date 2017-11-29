@@ -14,12 +14,12 @@ export default class DetailPane extends Component {
 
         times(columnNum, () => columnArray.push(
             <Grid.Column>
-                <Icon name='microchip' color={color}/>
+                <Icon name='microchip' color={color} size='large'/>
             </Grid.Column>
         ));
         times(count - columnArray.length, () => columnArrayRest.push(
             <Grid.Column>
-                <Icon name='microchip' color={color}/>
+                <Icon name='microchip' color={color} size='large'/>
             </Grid.Column>
         ));
         return <Grid columns={columnNum}>
