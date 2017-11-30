@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Grid, Icon, Label} from 'semantic-ui-react';
-import {times, uniqueId} from 'lodash';
+import {times} from 'lodash';
 import Gauge from "./widget/Gauge";
 
 export default class DetailPane extends Component {
@@ -8,13 +8,13 @@ export default class DetailPane extends Component {
         super(args);
     }
 
-    renderCoreUsage = (count, color) => {
+    renderCoreUsage = (id, count, color) => {
         if (isNaN(count)) {
             return null;
         }
         return (
             <Grid.Column>
-                <Gauge id={'gauge' + uniqueId()} value={count}/>
+                <Gauge id={'gauge_' + id} value={count}/>
             </Grid.Column>
         )
     }
@@ -28,13 +28,13 @@ export default class DetailPane extends Component {
             <div>
                 <Grid textAlign='center'>
                     <Grid.Row columns={7}>
-                        {this.renderCoreUsage(result.searchCPUPerSH, 'red')}
+                        {this.renderCoreUsage('sh1', result.searchCPUPerSH, 'red')}
                         <Grid.Column verticalAlign='middle'>
                             <Label>
                                 <Icon name='microchip' color='red'/>
                             </Label>
                         </Grid.Column>
-                        {this.renderCoreUsage(100 - result.searchCPUPerSH, 'blue')}
+                        {this.renderCoreUsage('sh2', 100 - result.searchCPUPerSH, 'blue')}
                         <Grid.Column verticalAlign='middle'>
                             <Label>
                                 <Icon name='microchip' color='blue'/>
@@ -53,19 +53,19 @@ export default class DetailPane extends Component {
                     </Grid.Row>
                     {!isNaN(result.searchCPUPerIndexer) ?
                         <Grid.Row columns={9}>
-                            {this.renderCoreUsage(result.searchCPUPerIndexer, 'red')}
+                            {this.renderCoreUsage('idx1', result.searchCPUPerIndexer, 'red')}
                             <Grid.Column verticalAlign='middle'>
                                 <Label>
                                     <Icon name='microchip' color='red'/>
                                 </Label>
                             </Grid.Column>
-                            {this.renderCoreUsage(result.dmaCPUPerIndexer, 'yellow')}
+                            {this.renderCoreUsage('idx2', result.dmaCPUPerIndexer, 'yellow')}
                             <Grid.Column verticalAlign='middle'>
                                 <Label>
                                     <Icon name='microchip' color='yellow'/>
                                 </Label>
                             </Grid.Column>
-                            {this.renderCoreUsage(100 - result.searchCPUPerIndexer - result.dmaCPUPerIndexer, 'blue')}
+                            {this.renderCoreUsage('idx3', 100 - result.searchCPUPerIndexer - result.dmaCPUPerIndexer, 'blue')}
                             <Grid.Column verticalAlign='middle'>
                                 <Label>
                                     <Icon name='microchip' color='blue'/>

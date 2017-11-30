@@ -89,8 +89,6 @@ export default class ConfigParallelTuningConfPanel extends Component {
                 [summarize]<br/>
                 {`bucket_refresh_interval_cluster=${this.props.data.result.tuningConfiguration.bucket_refresh_interval_cluster}`}<br/>
                 {`bucket_refresh_interval=${this.props.data.result.tuningConfiguration.bucket_refresh_interval}`}<br/>
-                [scheduler]<br/>
-                {`max_searches_perc=${this.props.data.result.tuningConfiguration.max_searches_perc}`}<br/>
             </Tab.Pane>
         )
     };
