@@ -25,7 +25,6 @@ export default class Gauge extends Component {
                 <svg id={this.props.id}
                      ref={node => this.node = node}
                      width={50} height={50}/>
-                <div style={{width: '50px', textAlign:'center'}}><span>{this.props.name}</span></div>
             </div>
         )
     }
