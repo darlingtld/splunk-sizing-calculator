@@ -104,11 +104,7 @@ export default class ConfigParallelTuningConfPanel extends Component {
                 <Header size='small'>
                     {`\${SPLUNK_HOME}/etc/system/local/indexes.conf`}
                 </Header>
-                [websense]<br/>
-                {`maxHotBuckets=${this.props.data.result.tuningConfiguration.maxHotBuckets}`}<br/>
-                [cisco_asa]<br/>
-                {`maxHotBuckets=${this.props.data.result.tuningConfiguration.maxHotBuckets}`}<br/>
-                [windows]<br/>
+                {`[<index_name>]`}<br/>
                 {`maxHotBuckets=${this.props.data.result.tuningConfiguration.maxHotBuckets}`}<br/>
             </Tab.Pane>
         )

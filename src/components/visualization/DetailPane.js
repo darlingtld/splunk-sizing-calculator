@@ -47,9 +47,9 @@ export default class DetailPane extends Component {
                         margin: '0px 20px 5px 20px'
                     }}>
                         <Icon color='red' name='circle'/>
-                        Search CPU Per Search Head
+                        Search CPU % Per Search Head
                         <Icon color='blue' name='circle'/>
-                        Margin CPU Per Search Head
+                        Idle CPU % Per Search Head
                     </Grid.Row>
                     {!isNaN(result.searchCPUPerIndexer) ?
                         <Grid.Row columns={9}>
@@ -79,11 +79,11 @@ export default class DetailPane extends Component {
                             margin: '0px 20px 5px 20px'
                         }}>
                             <Icon color='red' name='circle'/>
-                            Search CPU Per Indexer
+                            Search CPU % Per Indexer
                             <Icon color='yellow' name='circle'/>
-                            DMA CPU Per Indexer
+                            DMA CPU % Per Indexer
                             <Icon color='blue' name='circle'/>
-                            Margin CPU Per Indexer
+                            Idle CPU % Per Indexer
                         </Grid.Row>
                         : null}
                 </Grid>
