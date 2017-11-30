@@ -73,6 +73,7 @@ export default class ConfigParallelTuningPanel extends Component {
                             </Item.Content>
                         </Item>
                     </Item.Group>
+
                     {this.state.parallelEnableChecked && !this.state.autoTuningChecked ?
                         <Item.Group relaxed={true}>
                             <Divider horizontal section={true}>Parallel Settings</Divider>
@@ -145,6 +146,21 @@ export default class ConfigParallelTuningPanel extends Component {
                                 </Item.Content>
                             </Item>
                         </Item.Group> : null}
+                    {this.state.autoTuningChecked ?
+                        <Item.Group relaxed={true}>
+                            <Item>
+                                <Item.Content>
+                                    <Modal trigger={<Button floated='right' color='green'>View .conf files</Button>}>
+                                        <Modal.Header>Splunk .conf files</Modal.Header>
+                                        <Modal.Content>
+                                            <Modal.Description>
+                                                <ConfigParallelTuningConfPanel data={this.props.data}/>
+                                            </Modal.Description>
+                                        </Modal.Content>
+                                    </Modal>
+                                </Item.Content>
+                            </Item>
+                        </Item.Group>: null}
                 </Segment>
             </Transition>
         )
