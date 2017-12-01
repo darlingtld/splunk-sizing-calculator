@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
+import {assign} from 'lodash';
 import {Statistic, Grid, Button, Icon, Modal, Header, Table, Dropdown} from 'semantic-ui-react';
-import './ResourcePanel.scss';
 import ConfigVizPanel from "./ConfigVizPanel";
 import {esCalculate} from "../calculation/esCalculator";
-import {assign} from 'lodash';
+import jsPDF from 'jspdf';
+import './ResourcePanel.scss';
 
 export default class ResourcePanel extends Component {
     constructor(args) {
@@ -14,7 +15,7 @@ export default class ResourcePanel extends Component {
             shCPU: 0,
             shMemory: 0,
             idxCPU: 0,
-            idxMemory: 0
+            idxMemory: 0,
         }
     }
 
@@ -31,6 +32,83 @@ export default class ResourcePanel extends Component {
         console.log(result);
         assign(this.props.data, {result});
         this.props.onChange();
+    };
+
+    exportAsPDF = () => {
+        const {data} = this.props;
+        const pdf = new jsPDF('p', 'pt', 'letter');
+        pdf.setFontSize(15);
+        const concurrency = data.parallelEnableChecked ?
+            `
+                <tr><td>Network Traffic Concurrency</td><td>${data.searchHeadCores}</td></tr>
+                <tr><td>Authentication Concurrency</td><td>${data.indexerCores}</td></tr>
+                <tr><td>Web Concurrency</td><td>${data.marginOfError}</td></tr>
+            ` : '';
+        const source = `
+            <h2>ES Sizing Calculation Report</h2>
+            <h3>ES Sizing Input Parameters</h3>
+            <div>
+                <table>
+                    <thead>
+                    <tr><th>Parameter</th><th>Value</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Search Head</td><td>${data.searchHeadCores}</td></tr>
+                        <tr><td>Indexer</td><td>${data.indexerCores}</td></tr>
+                        <tr><td>Margin of Error%</td><td>${data.marginOfError}</td></tr>
+                        <tr><td>Splunk Enterprise Version</td><td>${data.splunkVersion}</td></tr>
+                        <tr><td>Enterprise Security Version</td><td>${data.esVersion}</td></tr>
+                        <tr><td>Enabled Correlation Searches</td><td>${data.correlationSearches}</td></tr>
+                        <tr><td>Concurrent Users</td><td>${data.concurrentUsers}</td></tr>
+                        <tr><td>Data Distribution Across Network Traffic Data Model</td><td>${data.networkTrafficTotal} GB</td></tr>
+                        <tr><td>Data Distribution Across Authentication Data Model</td><td>${data.authenticationTotal} GB</td></tr>
+                        <tr><td>Data Distribution Across Web Data Model</td><td>${data.webTotal} GB</td></tr>
+                        ${concurrency}
+                    </tbody>
+                </table>
+            </div>
+            <h3>ES Sizing Results</h3>
+            <div>
+                <table>
+                    <thead>
+                    <tr><th>Field</th><th>Value</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Number of Search Heads</td><td>${data.result.shNum}</td></tr>
+                        <tr><td>CPU cores per Search Head</td><td>${data.result.shCPU}</td></tr>
+                        <tr><td>Memory per Search Heads</td><td>${data.result.shMemory} GB</td></tr>
+                        <tr><td>Number of Indexers</td><td>${data.result.idxNum}</td></tr>
+                        <tr><td>CPU cores per Indexer</td><td>${data.result.idxCPU}</td></tr>
+                        <tr><td>Memory per Indexer</td><td>${data.result.idxMemory} GB</td></tr>
+                        <tr><td>Search CPU % Per Search Head</td><td>${data.result.searchCPUPerSH.toFixed(2)}%</td></tr>
+                        <tr><td>Idle CPU % Per Search Head</td><td>${100 - data.result.searchCPUPerSH.toFixed(2)}%</td></tr>
+                        <tr><td>Search CPU % Per Indexer</td><td>${data.result.searchCPUPerIndexer.toFixed(2)}%</td></tr>
+                        <tr><td>DMA CPU % Per Indexer</td><td>${data.result.dmaCPUPerIndexer.toFixed(2)}%</td></tr>
+                        <tr><td>Idle CPU % Per Indexer</td><td>${(100 - data.result.searchCPUPerIndexer - data.result.dmaCPUPerIndexer).toFixed(2)}%</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            `;
+
+        const margins = {
+            top: 10,
+            left: 60,
+            width: 600
+        };
+
+        pdf.fromHTML(
+            source // HTML string or DOM elem ref.
+            , margins.left // x coord
+            , margins.top // y coord
+            , {
+                'width': margins.width // max width of content on PDF
+            },
+            function (dispose) {
+                // dispose: object with X, Y of the last line add to the PDF
+                // this allow the insertion of new lines after html
+                pdf.save('es_sizing_calculation_results.pdf');
+            }
+        )
     };
 
     renderParameters = () => {
@@ -192,10 +270,24 @@ export default class ResourcePanel extends Component {
                                                     </Modal.Description>
                                                 </Modal.Content>
                                             </Modal>
-                                            <Dropdown.Item>
-                                                <Icon name='file pdf outline'/>
-                                                <span className='text'>Export PDF</span>
-                                            </Dropdown.Item>
+                                            <Modal
+                                                trigger={<Dropdown.Item>
+                                                    <Icon name='file pdf outline'/>
+                                                    <span className='text'>Export PDF</span>
+                                                </Dropdown.Item>}
+                                                header='Export'
+                                                content='Export the sizing calculation result to PDF?'
+                                                actions={[
+                                                    'No',
+                                                    {
+                                                        key: 'yes',
+                                                        content: 'Yes',
+                                                        positive: true,
+                                                        onClick: this.exportAsPDF
+                                                    },
+                                                ]}
+                                            />
+
                                         </Dropdown.Menu>
                                     </Dropdown>
                                 </Button.Group>

@@ -28,6 +28,11 @@ module.exports = {
                 to: path.join(__dirname, 'dist'),
             }
         ]),
+        new webpack.ProvidePlugin({
+            $: "jquery",
+            jQuery: "jquery",
+            "window.jQuery": "jquery"
+        }),
         new UglifyJSPlugin()
     ],
     resolve: {
