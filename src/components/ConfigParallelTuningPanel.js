@@ -26,7 +26,10 @@ export default class ConfigParallelTuningPanel extends Component {
 
     toggleEnable = () => this.setState({parallelEnableChecked: !this.state.parallelEnableChecked});
 
-    toggleAutoTuning = () => this.setState({autoTuningChecked: !this.state.autoTuningChecked});
+    toggleAutoTuning = () => this.setState({
+        autoTuningChecked: !this.state.autoTuningChecked,
+        parallelEnableChecked: !this.state.autoTuningChecked === true ? true : this.state.parallelEnableChecked
+    });
 
     onChangeNetworkTrafficConcurrency = (value) => this.setState({networkTrafficConcurrency: this.adjustValue(value)});
 
@@ -160,7 +163,7 @@ export default class ConfigParallelTuningPanel extends Component {
                                     </Modal>
                                 </Item.Content>
                             </Item>
-                        </Item.Group>: null}
+                        </Item.Group> : null}
                 </Segment>
             </Transition>
         )

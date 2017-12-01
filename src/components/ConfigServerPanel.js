@@ -267,8 +267,8 @@ export default class ConfigServerPanel extends Component {
     }
 
     renderRangeString(cores) {
-        const upper = Math.floor((100 + this.state.marginOfError) * cores/100);
-        const lower = Math.ceil((100 - this.state.marginOfError) * cores/100);
+        const upper = Math.floor((100 + this.state.marginOfError) * cores / 100);
+        const lower = Math.ceil((100 - this.state.marginOfError) * cores / 100);
         return (
             <Label color='olive' image style={{float: 'right'}}>
                 Range

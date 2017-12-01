@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {Component} from 'react'
 import HeaderBar from './HeaderBar';
 import ConfigPanel from "./ConfigPanel";
 import ResourcePanel from "./ResourcePanel";
@@ -21,18 +21,31 @@ const data = {
 
 };
 
-const Root = () => (
-    <div>
-        <HeaderBar/>
-        <Grid>
-            <Grid.Column width={8}>
-                <ConfigPanel data={data}/>
-            </Grid.Column>
-            <Grid.Column width={8}>
-                <ResourcePanel data={data}/>
-            </Grid.Column>
-        </Grid>
-    </div>
-)
+export default class Root extends Component {
+    constructor(args) {
+        super(args);
+        this.state = {
+            changeCount: 0
+        }
+    }
 
-export default Root
+    handleOnChange = () => {
+        this.setState({changeCount: this.state.changeCount + 1});
+    };
+
+    render() {
+        return (
+            <div>
+                <HeaderBar/>
+                <Grid>
+                    <Grid.Column width={8}>
+                        <ConfigPanel data={data}/>
+                    </Grid.Column>
+                    <Grid.Column width={8}>
+                        <ResourcePanel data={data} onChange={() => this.handleOnChange()}/>
+                    </Grid.Column>
+                </Grid>
+            </div>
+        )
+    }
+}

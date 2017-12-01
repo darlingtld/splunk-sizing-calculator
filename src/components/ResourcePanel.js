@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Statistic, Grid, Button, Icon, Modal, Header, Table} from 'semantic-ui-react';
+import {Statistic, Grid, Button, Icon, Modal, Header, Table, Dropdown} from 'semantic-ui-react';
 import './ResourcePanel.scss';
 import ConfigVizPanel from "./ConfigVizPanel";
 import {esCalculate} from "../calculation/esCalculator";
@@ -29,7 +29,8 @@ export default class ResourcePanel extends Component {
             idxMemory: result.idxMemory
         });
         console.log(result);
-        assign(this.props.data, {result})
+        assign(this.props.data, {result});
+        this.props.onChange();
     };
 
     renderParameters = () => {
@@ -177,20 +178,34 @@ export default class ResourcePanel extends Component {
                                     </Button.Content>
                                 </Button>
                                 {' '}
-                                <Modal trigger={<Button icon><Icon name='setting'/></Button>}>
-                                    <Modal.Header>ES Sizing Parameters</Modal.Header>
-                                    <Modal.Content image>
-                                        <Modal.Description>
-                                            {this.renderParameters()}
-                                        </Modal.Description>
-                                    </Modal.Content>
-                                </Modal>
+                                <Button.Group>
+                                    <Dropdown icon='anchor' floating button className='icon'>
+                                        <Dropdown.Menu className='left'>
+                                            <Modal trigger={<Dropdown.Item>
+                                                <Icon name='settings'/>
+                                                <span className='text'>View Settings</span>
+                                            </Dropdown.Item>}>
+                                                <Modal.Header>ES Sizing Parameters</Modal.Header>
+                                                <Modal.Content image>
+                                                    <Modal.Description>
+                                                        {this.renderParameters()}
+                                                    </Modal.Description>
+                                                </Modal.Content>
+                                            </Modal>
+                                            <Dropdown.Item>
+                                                <Icon name='file pdf outline'/>
+                                                <span className='text'>Export PDF</span>
+                                            </Dropdown.Item>
+                                        </Dropdown.Menu>
+                                    </Dropdown>
+                                </Button.Group>
                             </Button.Group>
                         </Grid.Column>
                     </Grid.Row>
                     <Grid.Row>
                         <Grid.Column width={15}>
-                            <ConfigVizPanel searchHeads={this.state.searchHeads} indexers={this.state.indexers} data={this.props.data}/>
+                            <ConfigVizPanel searchHeads={this.state.searchHeads} indexers={this.state.indexers}
+                                            data={this.props.data}/>
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>

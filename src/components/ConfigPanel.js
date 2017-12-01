@@ -6,6 +6,7 @@ import ConfigVersionPanel from './ConfigVersionPanel';
 import ConfigSearchLoadPanel from "./ConfigSearchLoadPanel";
 import ConfigDataDistributionPanel from "./ConfigDataDistributionPanel";
 import ConfigParallelTuningPanel from "./ConfigParallelTuningPanel";
+import {assign} from "lodash";
 
 export default class ConfigPanel extends Component {
     constructor(args) {
@@ -38,10 +39,12 @@ export default class ConfigPanel extends Component {
                     icon: 'openid',
                     subs: []
                 }
-
-            ]
+            ],
+            changeCount: 0
         }
     }
+
+
 
     handleItemClick = (e, {name}) => this.setState({activeItem: name});
 
@@ -54,15 +57,44 @@ export default class ConfigPanel extends Component {
             case 'Search Load':
                 return <ConfigSearchLoadPanel data={this.props.data}/>;
             case 'Network Traffic':
-                return <ConfigDataDistributionPanel name='Network Traffic' dataModel='networkTraffic' data={this.props.data}/>;
+                return <ConfigDataDistributionPanel name='Network Traffic' dataModel='networkTraffic'
+                                                    data={this.props.data}/>;
             case 'Authentication':
-                return <ConfigDataDistributionPanel name='Authentication' dataModel='authentication' data={this.props.data}/>;
+                return <ConfigDataDistributionPanel name='Authentication' dataModel='authentication'
+                                                    data={this.props.data}/>;
             case 'Web':
                 return <ConfigDataDistributionPanel name='Web' dataModel='web' data={this.props.data}/>;
             case 'Parallel Configuration Tuning':
                 return <ConfigParallelTuningPanel data={this.props.data}/>;
         }
 
+    };
+
+    renderSubInfo = (item) => {
+        const subInfoStyle = {
+            fontSize: 'small',
+            color: 'darkgray',
+            marginTop: '5px'
+        };
+        switch (item.name) {
+            case 'Server Specifications':
+                return <div
+                    style={subInfoStyle}>{`SH:${this.props.data.searchHeadCores} IDX:${this.props.data.indexerCores} Margin:${this.props.data.marginOfError}%`}</div>;
+            case 'Splunk Enterprise Version':
+                return <div
+                    style={subInfoStyle}>{`Splunk:${this.props.data.splunkVersion} ES:${this.props.data.esVersion}`}</div>;
+            case 'Search Load':
+                return <div
+                    style={subInfoStyle}>{`Corre searches:${this.props.data.correlationSearches} Concur users:${this.props.data.concurrentUsers}`}</div>;
+            case 'Data Distribution':
+                return <div
+                    style={subInfoStyle}>{`Net:${this.props.data.networkTrafficTotal}GB Auth:${this.props.data.authenticationTotal}GB Web:${this.props.data.webTotal}GB`}</div>;
+            case 'Parallel Configuration Tuning':
+                return this.props.data.parallelEnableChecked ?
+                    <div style={subInfoStyle}>
+                        {`Net:${this.props.data.networkTrafficConcurrency} Auth:${this.props.data.authenticationConcurrency} Web:${this.props.data.webConcurrency}`}
+                    </div> : null;
+        }
     };
 
     render() {
@@ -79,6 +111,7 @@ export default class ConfigPanel extends Component {
                                                           onClick={this.handleItemClick}>
                                             <Icon name={item.icon}/>
                                             {item.name}
+                                            {this.renderSubInfo(item)}
                                         </Menu.Item>;
                                     } else {
                                         return <Menu.Item key={item.name}>
@@ -90,6 +123,7 @@ export default class ConfigPanel extends Component {
                                                                onClick={this.handleItemClick}/>
                                                 )}
                                             </Menu.Menu>
+                                            {this.renderSubInfo(item)}
                                         </Menu.Item>
                                     }
                                 }
