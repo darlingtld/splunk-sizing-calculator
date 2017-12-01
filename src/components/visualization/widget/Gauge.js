@@ -16,7 +16,7 @@ export default class Gauge extends Component {
     }
 
     createGauge() {
-        loadLiquidFillGauge(this.props.id, this.props.value);
+        loadLiquidFillGauge(this.props.id, this.props.value, this.props.color);
     }
 
     render() {

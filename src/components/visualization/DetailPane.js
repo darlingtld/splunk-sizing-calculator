@@ -14,7 +14,7 @@ export default class DetailPane extends Component {
         }
         return (
             <Grid.Column>
-                <Gauge id={'gauge_' + id} value={count}/>
+                <Gauge id={'gauge_' + id} value={count} color={color}/>
             </Grid.Column>
         )
     }
@@ -27,19 +27,9 @@ export default class DetailPane extends Component {
         return (
             <div>
                 <Grid textAlign='center'>
-                    <Grid.Row columns={7}>
+                    <Grid.Row columns={5}>
                         {this.renderCoreUsage('sh1', result.searchCPUPerSH, 'red')}
-                        <Grid.Column verticalAlign='middle'>
-                            <Label>
-                                <Icon name='microchip' color='red'/>
-                            </Label>
-                        </Grid.Column>
                         {this.renderCoreUsage('sh2', 100 - result.searchCPUPerSH, 'blue')}
-                        <Grid.Column verticalAlign='middle'>
-                            <Label>
-                                <Icon name='microchip' color='blue'/>
-                            </Label>
-                        </Grid.Column>
                     </Grid.Row>
                     <Grid.Row style={{
                         border: '1px solid black',
@@ -52,25 +42,13 @@ export default class DetailPane extends Component {
                         Idle CPU % Per Search Head
                     </Grid.Row>
                     {!isNaN(result.searchCPUPerIndexer) ?
-                        <Grid.Row columns={9}>
+                        <Grid.Row columns={7}>
                             {this.renderCoreUsage('idx1', result.searchCPUPerIndexer, 'red')}
-                            <Grid.Column verticalAlign='middle'>
-                                <Label>
-                                    <Icon name='microchip' color='red'/>
-                                </Label>
-                            </Grid.Column>
+
                             {this.renderCoreUsage('idx2', result.dmaCPUPerIndexer, 'yellow')}
-                            <Grid.Column verticalAlign='middle'>
-                                <Label>
-                                    <Icon name='microchip' color='yellow'/>
-                                </Label>
-                            </Grid.Column>
+
                             {this.renderCoreUsage('idx3', 100 - result.searchCPUPerIndexer - result.dmaCPUPerIndexer, 'blue')}
-                            <Grid.Column verticalAlign='middle'>
-                                <Label>
-                                    <Icon name='microchip' color='blue'/>
-                                </Label>
-                            </Grid.Column>
+
                         </Grid.Row> : null}
                     {!isNaN(result.searchCPUPerIndexer) ?
                         <Grid.Row style={{

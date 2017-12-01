@@ -1,27 +1,32 @@
 import * as d3 from 'd3';
 
-export function liquidFillGaugeDefaultSettings(value) {
+export function liquidFillGaugeDefaultSettings(value, color) {
     const config = {};
-    if (value < 30) {
-        config.circleColor = '#37ca38';
-        config.waveColor = '#37ca38';
-        config.textColor = "#31632f";
-        config.waveTextColor = "#c3f8ce";
-    } else if (value < 60) {
-        config.circleColor = '#178BCA';
-        config.waveColor = '#178BCA';
-        config.textColor = "#045681";
-        config.waveTextColor = "#A4DBf8";
-    } else if (value < 80) {
-        config.circleColor = '#ca9842';
-        config.waveColor = '#ca9842';
-        config.textColor = "#b9590a";
-        config.waveTextColor = "#f8c6a8";
-    } else {
-        config.circleColor = '#ca4e4a';
-        config.waveColor = '#ca4e4a';
-        config.textColor = "#b92d0c";
-        config.waveTextColor = "#f87d80";
+    switch (color) {
+        case 'green':
+            config.circleColor = '#37ca38';
+            config.waveColor = '#37ca38';
+            config.textColor = "#31632f";
+            config.waveTextColor = "#c3f8ce";
+            break;
+        case 'blue':
+            config.circleColor = '#178BCA';
+            config.waveColor = '#178BCA';
+            config.textColor = "#045681";
+            config.waveTextColor = "#A4DBf8";
+            break;
+        case 'yellow':
+            config.circleColor = '#ca9842';
+            config.waveColor = '#ca9842';
+            config.textColor = "#b9590a";
+            config.waveTextColor = "#f8c6a8";
+            break;
+        case 'red':
+            config.circleColor = '#ca4e4a';
+            config.waveColor = '#ca4e4a';
+            config.textColor = "#b92d0c";
+            config.waveTextColor = "#f87d80";
+            break;
     }
     return {
         minValue: 0, // The gauge minimum value.
@@ -47,10 +52,10 @@ export function liquidFillGaugeDefaultSettings(value) {
     };
 }
 
-export function loadLiquidFillGauge(elementId, value, config) {
+export function loadLiquidFillGauge(elementId, value, color, config) {
     let textContent = '0.0';
 
-    if (!config) config = liquidFillGaugeDefaultSettings(value);
+    if (!config) config = liquidFillGaugeDefaultSettings(value, color);
 
     let gauge = d3.select("#" + elementId);
     let radius = Math.min(parseInt(gauge.style("width")), parseInt(gauge.style("height"))) / 2;
